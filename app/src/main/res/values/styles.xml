@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar">
+        <!--<item name="android:windowNoTitle">true</item> -->
+    </style>
+
+    <style name="title_bar_style">
+        <item name="android:background">@drawable/bg_titlebar</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/title_bar_height</item>
+    </style>
+
+    <style name="title_btn_style">
+        <item name="android:background">#3fa9f5</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="title_btn_normal_style">
+        <item name="android:background">#bcbcbc</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+</resources>
