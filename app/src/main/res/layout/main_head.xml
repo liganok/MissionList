@@ -30,15 +30,27 @@
             android:scaleType="fitXY" />
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/top_more"
+    <FrameLayout
+        android:id="@+id/top_head_container2"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher" />
+        android:paddingLeft="10.0dip"
+        android:paddingRight="10.0dip"
+        android:layout_alignParentRight="true">
+        <ImageView
+            android:id="@+id/top_more"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_width="@dimen/head_size"
+            android:layout_height="@dimen/head_size"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_head"
+            android:padding="2.0dip"
+            android:src="@drawable/ic_action_new"
+            android:scaleType="fitXY"/>
+    </FrameLayout>
+
+
 
     <RelativeLayout
         android:id="@+id/title_click_layout"
