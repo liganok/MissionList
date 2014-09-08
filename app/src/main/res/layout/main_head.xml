@@ -13,7 +13,7 @@
         android:visibility="gone" />
 
     <FrameLayout
-        android:id="@+id/top_head_container"
+        android:id="@+id/top_head_me"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:paddingLeft="10.0dip"
@@ -31,7 +31,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/top_head_container2"
+        android:id="@+id/top_head_add"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:paddingLeft="10.0dip"
@@ -50,8 +50,6 @@
             android:scaleType="fitXY"/>
     </FrameLayout>
 
-
-
     <RelativeLayout
         android:id="@+id/title_click_layout"
         android:layout_width="wrap_content"
@@ -61,18 +59,18 @@
         <Button
             style="@style/title_btn_style"
             android:id="@+id/btn_todo"
-            android:text="hello"
+            android:text="To Do"
             android:layout_width="@dimen/head_button_width"
             android:layout_height="@dimen/head_button_height"
-            android:layout_marginRight="0.25px"
+            android:layout_marginRight="0.01px"
             android:layout_centerVertical="true"/>
         <Button
             style="@style/title_btn_normal_style"
             android:id="@+id/btn_done"
-            android:text="hello"
+            android:text="Done"
             android:layout_width="@dimen/head_button_width"
             android:layout_height="@dimen/head_button_height"
-            android:layout_marginLeft="0.25px"
+            android:layout_marginLeft="0.01px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/btn_todo"/>
 

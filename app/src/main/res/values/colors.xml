@@ -698,4 +698,9 @@
     <item name="bg_row_normal_center" type="color">@color/bg_row_normal</item>
     <item name="bg_row_normal_end" type="color">@color/bg_row_normal</item>
 
+
+
+    <color name="bt_title_pressed">#3fa9f5</color>
+    <color name="bt_title_nomal">#bcbcbc</color>
+
 </resources>
