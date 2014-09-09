@@ -62,7 +62,7 @@
             android:text="To Do"
             android:layout_width="@dimen/head_button_width"
             android:layout_height="@dimen/head_button_height"
-            android:layout_marginRight="0.01px"
+            android:layout_marginRight="0.0px"
             android:layout_centerVertical="true"/>
         <Button
             style="@style/title_btn_normal_style"
@@ -70,7 +70,7 @@
             android:text="Done"
             android:layout_width="@dimen/head_button_width"
             android:layout_height="@dimen/head_button_height"
-            android:layout_marginLeft="0.01px"
+            android:layout_marginLeft="0.0px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/btn_todo"/>
 

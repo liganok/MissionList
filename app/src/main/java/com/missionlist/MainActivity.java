@@ -1,7 +1,9 @@
 package com.missionlist;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -124,18 +126,23 @@ public class MainActivity extends Activity {
             }
         });
     }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void prepareSwitch(int target){
         if (target == TO_DO){
             tab_type = TO_DO;
-            btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
-            btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
+            btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_pressed));
+            btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_nomal));
+            //btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
+            //btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
             initList();
             simpleAdapter.notifyDataSetChanged();
         }
         if (target == DONE){
             tab_type = DONE;
-            btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
-            btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
+            btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_nomal));
+            btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_pressed));
+            //btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
+            //btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
             initList();
             simpleAdapter.notifyDataSetChanged();
         }

@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:paddingRight="5dip" >
+        android:paddingLeft="5dip" >
         <ImageView
             android:id="@+id/header"
             android:layout_width="55dp"
