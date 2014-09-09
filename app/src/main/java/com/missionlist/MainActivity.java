@@ -141,9 +141,9 @@ public class MainActivity extends Activity {
         }
     }
     private void initList(){
-        if (tab_type == 1){
+        if (tab_type == TO_DO){
             getToDoList();
-        }else if (tab_type == 2){
+        }else if (tab_type == DONE){
             getDoneList();
         }
     }
@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
         listItems.clear();
         for (int i = 0; i<10; i++){
             Map<String,Object> listItem = new HashMap<String, Object>();
-            listItem.put("pic",R.drawable.ic_action_new);
+            listItem.put("pic",R.drawable.ic_todo);
             listItem.put("title","Title_todo"+ i + 1);
             listItem.put("des","Description"+ i + 1);
             listItems.add(listItem);
@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
         listItems.clear();
         for (int i = 0; i<10; i++){
             Map<String,Object> listItem = new HashMap<String, Object>();
-            listItem.put("pic",R.drawable.ic_action_new);
+            listItem.put("pic",R.drawable.ic_done);
             listItem.put("title","Title_Done"+ i + 1);
             listItem.put("des","Description"+ i + 1);
             listItems.add(listItem);
@@ -173,7 +173,7 @@ public class MainActivity extends Activity {
     private void initAdapter(){
         simpleAdapter = new SimpleAdapter(this,listItems,
                 R.layout.item_style,
-                new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_activity_title,R.id.list_activity_des});
+                new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_title,R.id.list_des});
         list = (ListView) findViewById(R.id.task_List);
         list.setAdapter(simpleAdapter);
     }

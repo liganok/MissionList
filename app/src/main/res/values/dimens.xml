@@ -6,4 +6,5 @@
     <dimen name="head_size">28.0dip</dimen>
     <dimen name="head_button_width">100dp</dimen>
     <dimen name="head_button_height">32dp</dimen>
+    <dimen name="list_height">65dp</dimen>
 </resources>

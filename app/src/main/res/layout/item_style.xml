@@ -2,29 +2,34 @@
     android:orientation="horizontal"
     android:id="@+id/item_list"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
-    <ImageView
-        android:id="@+id/header"
+    android:layout_height="@dimen/list_height">
+
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingLeft="10dp"/>
+        android:layout_height="fill_parent"
+        android:paddingRight="5dip" >
+        <ImageView
+            android:id="@+id/header"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"/>
+    </FrameLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
         <TextView
-            android:id="@+id/list_activity_title"
+            style="@style/tv_list_title"
+            android:id="@+id/list_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:paddingLeft="10dp"/>
+            android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/list_activity_des"
+            style="@style/tv_list_des"
+            android:id="@+id/list_des"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:paddingLeft="10dp"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
 
