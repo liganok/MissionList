@@ -3,6 +3,7 @@ package com.missionlist;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -32,13 +33,13 @@ public class MainActivity extends Activity {
     private int tab_type;
     private SimpleAdapter simpleAdapter;
     private ListView list;
-    private static int TO_DO = 1;
-    private static int DONE = 2;
+    private final static int TO_DO = 1;
+    private final static int DONE = 2;
     private GestureDetector gestureDetector;
 
 
     final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
-    //final List<Map<String,Object>> doneListItems = new ArrayList<Map<String, Object>>();
+    //final List<Map<String,Object>> doneListItems = new_item ArrayList<Map<String, Object>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(), "me", Toast.LENGTH_SHORT);
-                toast.show();
+                //toast.show();
+                Intent intent = new Intent(MainActivity.this,MeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -68,7 +71,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT);
-                toast.show();
+                //toast.show();
+                Intent intent = new Intent(MainActivity.this,NewActivity.class);
+                startActivity(intent);
             }
         });
 
