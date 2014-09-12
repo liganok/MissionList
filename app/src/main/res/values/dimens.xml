@@ -10,4 +10,5 @@
     <dimen name="btn_radius">7dp</dimen>
     <dimen name="tv_new_head_width">200dp</dimen>
     <dimen name="tv_new_head_height">32dp</dimen>
+
 </resources>

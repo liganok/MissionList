@@ -16,29 +16,86 @@
         <TextView
             style="@style/tv_new"
             android:text = "Title"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:id="@+id/textView" />
+            android:id="@+id/tv_new_title" />
 
         <EditText
             style="@style/et_new"
-            android:id="@+id/editText"
-            android:layout_toRightOf="@+id/textView" />
+            android:id="@+id/et_new_title"
+            android:layout_toRightOf="@+id/tv_new_title" />
     </RelativeLayout>
 
     <RelativeLayout
         style="@style/rl_new"
         android:id="@+id/relativeLayout1"
         android:layout_below="@+id/relativeLayout">
+        <TextView
+            style="@style/tv_new"
+            android:text = "Start Time"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:id="@+id/tv_new_start_time" />
 
+        <EditText
+            style="@style/et_new"
+            android:id="@+id/et_new_start_time"
+            android:layout_toRightOf="@+id/tv_new_start_time" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        style="@style/rl_new"
         android:id="@+id/relativeLayout2"
         android:layout_below="@+id/relativeLayout1">
+        <TextView
+            style="@style/tv_new"
+            android:text = "Due Time"
+            android:id="@+id/tv_new_due_time" />
+        <EditText
+            style="@style/et_new"
+            android:id="@+id/editText"
+            android:layout_toRightOf="@+id/tv_new_due_time" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        style="@style/rl_new"
+        android:id="@+id/relativeLayout3"
+        android:layout_below="@+id/relativeLayout2">
+        <TextView
+            style="@style/tv_new"
+            android:text = "Priority"
+            android:id="@+id/tv_new_priority" />
+        <EditText
+            style="@style/et_new"
+            android:id="@+id/et_priority"
+            android:layout_toRightOf="@+id/tv_new_priority" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/rl_new"
+        android:id="@+id/relativeLayout4"
+        android:layout_below="@+id/relativeLayout3">
+        <TextView
+            style="@style/tv_new"
+            android:text = "Occurrence"
+            android:id="@+id/tv_new_occurrence" />
+        <EditText
+            style="@style/et_new"
+            android:id="@+id/et_new_occurrence"
+            android:layout_toRightOf="@+id/tv_new_occurrence" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/rl_new"
+        android:id="@+id/relativeLayout5"
+        android:layout_below="@+id/relativeLayout4">
+        <TextView
+            style="@style/tv_new"
+            android:text = "Description"
+            android:id="@+id/tv_new_des" />
+        <EditText
+            style="@style/et_new"
+            android:inputType="textMultiLine"
+            android:id="@+id/et_new_des"
+            android:layout_toRightOf="@+id/tv_new_des" />
     </RelativeLayout>
 
 
