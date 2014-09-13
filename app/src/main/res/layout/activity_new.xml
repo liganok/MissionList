@@ -5,14 +5,12 @@
     android:background="@color/activity_bg_color"
     tools:context="com.missionlist.NewActivity">
     <include layout = "@layout/new_head"
-        android:id="@+id/include" />
+        android:id="@+id/include1" />
 
     <RelativeLayout
         style="@style/rl_new"
-        android:layout_below="@+id/include"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="false">
+        android:layout_below="@+id/include1"
+        android:id="@+id/relativeLayout">
         <TextView
             style="@style/tv_new"
             android:text = "Title"
@@ -31,8 +29,6 @@
         <TextView
             style="@style/tv_new"
             android:text = "Start Time"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
             android:id="@+id/tv_new_start_time" />
 
         <EditText

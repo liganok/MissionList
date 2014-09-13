@@ -57,8 +57,6 @@
             android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentEnd="false"
             android:layout_centerVertical="true" />
 
     </RelativeLayout>
