@@ -16,12 +16,12 @@ public class MissionListApplication extends Application {
 
     public void onCreate(){
         super.onCreate();
-        //ParseObject.registerSubclass();
+        ParseObject.registerSubclass(Mission.class);
         // enable the Local Datastore
         Parse.enableLocalDatastore(getApplicationContext());
         Parse.initialize(this, APP_ID, Client_ID);
-        ParseUser.enableAutomaticUser();
-        ParseACL defaultACL = new ParseACL();
-        ParseACL.setDefaultACL(defaultACL, true);
+       // ParseUser.enableAutomaticUser();
+        //ParseACL defaultACL = new ParseACL();
+        //ParseACL.setDefaultACL(defaultACL, true);
     }
 }
