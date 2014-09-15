@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -52,25 +53,21 @@ public class NewActivity extends Activity {
                 occurrence = (EditText)findViewById(R.id.et_new_occurrence);
                 description = (EditText)findViewById(R.id.et_new_des);
 
-                if (mission == null){
-                    mission = new Mission();
-                }
+                mission = new Mission();
                 mission.setTitle(title.getText().toString());
                 mission.setPriority(priority.getText().toString());
                 mission.setOccurrence(occurrence.getText().toString());
                 mission.setDescription(description.getText().toString());
                // mission.setAuthor(ParseUser.getCurrentUser());
                 mission.setStatus("New");
-                mission.pinInBackground(new SaveCallback() {
+                mission.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if (isFinishing()) {
-                            return;
-                        }
-                        if (e == null) {
-                            setResult(Activity.RESULT_OK);
-                            finish();
-                        } else {
+                        if (e==null){
+                            Toast.makeText(getApplicationContext(),
+                                "Success saving: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();}
+                        else{
                             Toast.makeText(getApplicationContext(),
                                     "Error saving: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();

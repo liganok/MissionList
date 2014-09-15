@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Created by Administrator on 2014/9/13.
  */
-@ParseClassName("")
+@ParseClassName("Mission")
 public class Mission extends ParseObject {
     public String getTitle(){return getString("title");}
     public void  setTitle(String title) {put("title",title);}

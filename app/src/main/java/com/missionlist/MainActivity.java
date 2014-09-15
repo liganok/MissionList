@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,8 @@ public class MainActivity extends Activity {
     private final static int DONE = 2;
     private GestureDetector gestureDetector;
 
+    private static final int ACTIVITY_CREATE = 0;
+    private static final int ACTIVITY_EDIT = 1;
 
     final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
     //final List<Map<String,Object>> doneListItems = new_item ArrayList<Map<String, Object>>();
@@ -73,7 +77,7 @@ public class MainActivity extends Activity {
                 Toast toast=Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT);
                 //toast.show();
                 Intent intent = new Intent(MainActivity.this,NewActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, ACTIVITY_CREATE);
             }
         });
 
@@ -208,4 +212,23 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (intent == null) {
+            return;
+        }
+        final Bundle extras = intent.getExtras();
+
+        switch (requestCode) {
+            case ACTIVITY_CREATE:
+
+                break;
+            case ACTIVITY_EDIT:
+
+                break;
+        }
+    }
+
 }
