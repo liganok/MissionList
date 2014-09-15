@@ -53,7 +53,9 @@ public class NewActivity extends Activity {
                 occurrence = (EditText)findViewById(R.id.et_new_occurrence);
                 description = (EditText)findViewById(R.id.et_new_des);
 
-                mission = new Mission();
+                if(mission == null){
+                    mission = new Mission();
+                }
                 mission.setTitle(title.getText().toString());
                 mission.setPriority(priority.getText().toString());
                 mission.setOccurrence(occurrence.getText().toString());
@@ -63,11 +65,13 @@ public class NewActivity extends Activity {
                 mission.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if (e==null){
-                            Toast.makeText(getApplicationContext(),
-                                "Success saving: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();}
-                        else{
+                        if (isFinishing()) {
+                            return;
+                        }
+                        if (e == null) {
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                        } else {
                             Toast.makeText(getApplicationContext(),
                                     "Error saving: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
@@ -80,7 +84,7 @@ public class NewActivity extends Activity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewActivity.this.finish();
+                finish();
             }
         });
     }

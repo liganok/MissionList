@@ -28,6 +28,11 @@
             android:name=".MeActivity"
             android:label="@string/title_activity_me" >
         </activity>
+        <activity
+            android:theme="@style/MyDialogStyle"
+            android:name=".Dialog"
+            android:label="@string/title_activity_dialog" >
+        </activity>
     </application>
 
 </manifest>

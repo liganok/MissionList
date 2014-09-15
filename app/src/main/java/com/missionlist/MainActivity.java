@@ -11,13 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ import java.util.Map;
 public class MainActivity extends Activity {
 
     //Variable
+    private Mission mission;
     private FrameLayout top_head_me;
     private FrameLayout top_head_add;
     private Button btn_to_do;
@@ -60,6 +64,7 @@ public class MainActivity extends Activity {
         top_head_add = (FrameLayout) findViewById(R.id.top_head_add);
         btn_to_do = (Button) findViewById(R.id.btn_todo);
         btn_done = (Button) findViewById(R.id.btn_done);
+        list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +97,15 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 prepareSwitch(DONE);
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, Dialog.class);
+                startActivity(intent);
+                return false;
             }
         });
 
@@ -166,23 +180,43 @@ public class MainActivity extends Activity {
 
     private void getToDoList(){
         listItems.clear();
-        for (int i = 0; i<10; i++){
-            Map<String,Object> listItem = new HashMap<String, Object>();
-            listItem.put("pic",R.drawable.ic_todo);
-            listItem.put("title","Title_todo"+ i + 1);
-            listItem.put("des","Description"+ i + 1);
-            listItems.add(listItem);
+        if(mission == null){ mission = new Mission();}
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.orderByAscending("title");
+        query.whereNotEqualTo("status",getResources().getStringArray(R.array.status)[2]);
+        try {
+            List<Mission> missions = query.find();
+            for (int i=0;i<missions.size();i++){
+                Mission mission1 = missions.get(i);
+                Map<String,Object> listItem = new HashMap<String, Object>();
+                listItem.put("pic",R.drawable.ic_todo);
+                listItem.put("title",mission1.getTitle());
+                listItem.put("des",mission1.getDescription());
+                listItems.add(listItem);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
     private void getDoneList(){
         listItems.clear();
-        for (int i = 0; i<10; i++){
-            Map<String,Object> listItem = new HashMap<String, Object>();
-            listItem.put("pic",R.drawable.ic_done);
-            listItem.put("title","Title_Done"+ i + 1);
-            listItem.put("des","Description"+ i + 1);
-            listItems.add(listItem);
+        if(mission == null){ mission = new Mission();}
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.orderByAscending("title");
+        query.whereEqualTo("status", getResources().getStringArray(R.array.status)[2]);
+        try {
+            List<Mission> missions = query.find();
+            for (int i=0;i<missions.size();i++){
+                Mission mission1 = missions.get(i);
+                Map<String,Object> listItem = new HashMap<String, Object>();
+                listItem.put("pic",R.drawable.ic_done);
+                listItem.put("title",mission1.getTitle());
+                listItem.put("des",mission1.getDescription());
+                listItems.add(listItem);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -190,7 +224,6 @@ public class MainActivity extends Activity {
         simpleAdapter = new SimpleAdapter(this,listItems,
                 R.layout.item_style,
                 new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_title,R.id.list_des});
-        list = (ListView) findViewById(R.id.task_List);
         list.setAdapter(simpleAdapter);
     }
 
@@ -216,18 +249,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (intent == null) {
-            return;
-        }
-        final Bundle extras = intent.getExtras();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ACTIVITY_CREATE:
+                    initList();
+                    simpleAdapter.notifyDataSetChanged();
+                    break;
+                case ACTIVITY_EDIT:
 
-        switch (requestCode) {
-            case ACTIVITY_CREATE:
-
-                break;
-            case ACTIVITY_EDIT:
-
-                break;
+                    break;
+            }
         }
     }
 
