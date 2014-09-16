@@ -704,5 +704,6 @@
     <color name="bt_title_nomal">#bcbcbc</color>
 
     <color name="rl_background">#ffffff</color>
+    <color name="rl_dialog_background">#caf8f8f8</color>
 
 </resources>

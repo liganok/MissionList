@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
 
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
+    private static final int ACTIVITY_DIALOG = 2;
 
     final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
     //final List<Map<String,Object>> doneListItems = new_item ArrayList<Map<String, Object>>();
@@ -104,7 +105,11 @@ public class MainActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, Dialog.class);
-                startActivity(intent);
+                Map<String,Object> listItem = listItems.get(position);
+                intent.putExtra("ID",listItem.get("ID").toString());
+                intent.putExtra("title",listItem.get("title").toString());
+                intent.putExtra("status",listItem.get("status").toString());
+                startActivityForResult(intent,ACTIVITY_DIALOG);
                 return false;
             }
         });
@@ -189,6 +194,8 @@ public class MainActivity extends Activity {
             for (int i=0;i<missions.size();i++){
                 Mission mission1 = missions.get(i);
                 Map<String,Object> listItem = new HashMap<String, Object>();
+                listItem.put("ID",mission1.getObjectId());
+                listItem.put("status",mission1.getStatus());
                 listItem.put("pic",R.drawable.ic_todo);
                 listItem.put("title",mission1.getTitle());
                 listItem.put("des",mission1.getDescription());
@@ -250,15 +257,8 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case ACTIVITY_CREATE:
-                    initList();
-                    simpleAdapter.notifyDataSetChanged();
-                    break;
-                case ACTIVITY_EDIT:
-
-                    break;
-            }
+            initList();
+            simpleAdapter.notifyDataSetChanged();
         }
     }
 
