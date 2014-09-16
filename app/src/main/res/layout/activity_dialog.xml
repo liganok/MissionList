@@ -10,31 +10,52 @@
 
 
     <RelativeLayout
-        android:layout_width="200dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true">
+        style="@style/rl_dialog">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:id="@+id/rl_dialog_title"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp">
+            <TextView
+                style="@style/tv_dialog_title"
+                android:text="Title"/>
+        </RelativeLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="56dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            style="@style/rl_dialog_space"
+            android:id="@+id/rl_dialog_space1"
+            android:layout_below="@id/rl_dialog_title"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp">
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_dialog_set_status"
+            android:layout_below="@id/rl_dialog_space1"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp">
+            <TextView
+                style="@style/tv_dialog_action"
+                android:text="Set to done"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/rl_dialog_space"
+            android:id="@+id/rl_dialog_space2"
+            android:layout_below="@id/rl_dialog_set_status"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp">
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_dialog_delete"
+            android:layout_below="@id/rl_dialog_space2"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp">
+            <TextView
+                style="@style/tv_dialog_action"
+                android:text="Delete"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 </RelativeLayout>

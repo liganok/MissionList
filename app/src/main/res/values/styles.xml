@@ -89,6 +89,41 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="rl_dialog">
+        <item name="android:layout_width">260dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#caf8f8f8</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="rl_dialog_space">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">#ff7b7b7b</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+
+    <style name="tv_dialog_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+
+    <style name="tv_dialog_action">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+
 
 
 
