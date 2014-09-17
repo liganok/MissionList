@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
                 intent.putExtra("title",listItem.get("title").toString());
                 intent.putExtra("status",listItem.get("status").toString());
                 startActivityForResult(intent,ACTIVITY_DIALOG);
-                return false;
+                return true;
             }
         });
 
@@ -217,6 +217,8 @@ public class MainActivity extends Activity {
             for (int i=0;i<missions.size();i++){
                 Mission mission1 = missions.get(i);
                 Map<String,Object> listItem = new HashMap<String, Object>();
+                listItem.put("ID",mission1.getObjectId());
+                listItem.put("status",mission1.getStatus());
                 listItem.put("pic",R.drawable.ic_done);
                 listItem.put("title",mission1.getTitle());
                 listItem.put("des",mission1.getDescription());
