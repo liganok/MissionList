@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 
 public class Dialog extends Activity {
@@ -36,8 +37,9 @@ public class Dialog extends Activity {
         rl_dialog_set_status = (RelativeLayout)findViewById(R.id.rl_dialog_set_status);
         rl_dialog_delete = (RelativeLayout)findViewById(R.id.rl_dialog_delete);
         status = getIntent().getExtras().getString("status");
+        final String status_done = getResources().getStringArray(R.array.status)[2];
         ID = getIntent().getExtras().getString("ID");
-        if (status == getResources().getStringArray(R.array.status)[2]){
+        if (status.equals(status_done)){
             tv_dialog_action.setText("Reset to in process");
         }else{
             tv_dialog_action.setText("Set to done");
@@ -46,18 +48,20 @@ public class Dialog extends Activity {
         rl_dialog_set_status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status == getResources().getStringArray(R.array.status)[2]){
-                    if (mission == null){
-                        mission = new Mission();
-                    }
+                if (status.equals(status_done)){
                     ParseQuery<Mission> query = Mission.getQuery();
                     query.whereEqualTo("objectId",ID);
                     query.getFirstInBackground(new GetCallback<Mission>() {
                         @Override
                         public void done(Mission object, ParseException e) {
-                            if (!isFinishing()) {
-                                mission = object;
-                                mission.setStatus(getResources().getStringArray(R.array.status)[1]);
+                            if (e == null) {
+                                object.setStatus(getResources().getStringArray(R.array.status)[1].toString());
+                                object.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+
+                                    }
+                                });
                                 setResult(Activity.RESULT_OK);
                                 finish();
                              }
@@ -65,23 +69,43 @@ public class Dialog extends Activity {
                     });
 
                 }else{
-                    if (mission == null){
-                        mission = new Mission();
-                    }
                     ParseQuery<Mission> query = Mission.getQuery();
                     query.whereEqualTo("objectId",ID);
                     query.getFirstInBackground(new GetCallback<Mission>() {
                         @Override
                         public void done(Mission object, ParseException e) {
-                            if (!isFinishing()) {
-                                mission = object;
-                                mission.setStatus(getResources().getStringArray(R.array.status)[2]);
+                            if (e == null) {
+                                object.setStatus(getResources().getStringArray(R.array.status)[2].toString());
+                                object.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+
+                                    }
+                                });
                                 setResult(Activity.RESULT_OK);
                                 finish();
                             }
                         }
                     });
                 }
+            }
+        });
+
+        rl_dialog_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseQuery<Mission> query = Mission.getQuery();
+                query.whereEqualTo("objectId",ID);
+                query.getFirstInBackground(new GetCallback<Mission>() {
+                    @Override
+                    public void done(Mission object, ParseException e) {
+                        if (e == null) {
+                            object.deleteInBackground();
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                        }
+                    }
+                });
             }
         });
 
