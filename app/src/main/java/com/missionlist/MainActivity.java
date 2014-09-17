@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -55,8 +56,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initView();
-        initList();
-        initAdapter();
+        new InitListTask().execute();
+        //initList();
+        //initAdapter();
     }
 
     //Initial view
@@ -175,15 +177,15 @@ public class MainActivity extends Activity {
             simpleAdapter.notifyDataSetChanged();
         }
     }
-    private void initList(){
-        if (tab_type == TO_DO){
-            getToDoList();
-        }else if (tab_type == DONE){
-            getDoneList();
+    private List<Map<String,Object>> initList(){
+        if (tab_type == DONE){
+           return getDoneList();
+        }else{
+           return getToDoList();
         }
     }
 
-    private void getToDoList(){
+    private List<Map<String,Object>> getToDoList(){
         listItems.clear();
         if(mission == null){ mission = new Mission();}
         ParseQuery<Mission> query = Mission.getQuery();
@@ -204,9 +206,10 @@ public class MainActivity extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return listItems;
     }
 
-    private void getDoneList(){
+    private List<Map<String,Object>> getDoneList(){
         listItems.clear();
         if(mission == null){ mission = new Mission();}
         ParseQuery<Mission> query = Mission.getQuery();
@@ -227,13 +230,18 @@ public class MainActivity extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return  listItems;
     }
 
     private void initAdapter(){
-        simpleAdapter = new SimpleAdapter(this,listItems,
-                R.layout.item_style,
-                new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_title,R.id.list_des});
-        list.setAdapter(simpleAdapter);
+        if (simpleAdapter == null){
+            simpleAdapter = new SimpleAdapter(this,listItems,
+                    R.layout.item_style,
+                    new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_title,R.id.list_des});
+            list.setAdapter(simpleAdapter);
+        }else {
+            simpleAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -260,7 +268,18 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
             initList();
-            simpleAdapter.notifyDataSetChanged();
+            initAdapter();
+        }
+    }
+
+    class InitListTask extends AsyncTask<String, Integer, List<Map<String,Object>>> {
+        @Override
+        protected List<Map<String,Object>> doInBackground(String... params) {
+             return initList();
+        }
+
+        protected void onPostExecute(String result) {
+            initAdapter();
         }
     }
 
