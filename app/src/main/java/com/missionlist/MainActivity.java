@@ -210,6 +210,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
+            pb_main.setVisibility(View.VISIBLE);
             new InitListTask().execute(TO_DO);
         }
     }
