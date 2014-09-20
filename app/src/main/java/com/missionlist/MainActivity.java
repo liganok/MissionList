@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -56,9 +57,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initView();
-        new InitListTask().execute();
-        //initList();
-        //initAdapter();
+        new InitListTask().execute(TO_DO);
     }
 
     //Initial view
@@ -162,78 +161,17 @@ public class MainActivity extends Activity {
             tab_type = TO_DO;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_pressed));
             btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_nomal));
-            //btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
-            //btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
-            initList();
-            simpleAdapter.notifyDataSetChanged();
+            new InitListTask().execute(TO_DO);;
         }
         if (target == DONE){
             tab_type = DONE;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_nomal));
             btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_pressed));
-            //btn_to_do.setBackgroundColor(getResources().getColor(R.color.bt_title_nomal));
-            //btn_done.setBackgroundColor(getResources().getColor(R.color.bt_title_pressed));
-            initList();
-            simpleAdapter.notifyDataSetChanged();
-        }
-    }
-    private List<Map<String,Object>> initList(){
-        if (tab_type == DONE){
-           return getDoneList();
-        }else{
-           return getToDoList();
+            new InitListTask().execute(DONE);;
         }
     }
 
-    private List<Map<String,Object>> getToDoList(){
-        listItems.clear();
-        if(mission == null){ mission = new Mission();}
-        ParseQuery<Mission> query = Mission.getQuery();
-        query.orderByAscending("title");
-        query.whereNotEqualTo("status",getResources().getStringArray(R.array.status)[2]);
-        try {
-            List<Mission> missions = query.find();
-            for (int i=0;i<missions.size();i++){
-                Mission mission1 = missions.get(i);
-                Map<String,Object> listItem = new HashMap<String, Object>();
-                listItem.put("ID",mission1.getObjectId());
-                listItem.put("status",mission1.getStatus());
-                listItem.put("pic",R.drawable.ic_todo);
-                listItem.put("title",mission1.getTitle());
-                listItem.put("des",mission1.getDescription());
-                listItems.add(listItem);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
-
-    private List<Map<String,Object>> getDoneList(){
-        listItems.clear();
-        if(mission == null){ mission = new Mission();}
-        ParseQuery<Mission> query = Mission.getQuery();
-        query.orderByAscending("title");
-        query.whereEqualTo("status", getResources().getStringArray(R.array.status)[2]);
-        try {
-            List<Mission> missions = query.find();
-            for (int i=0;i<missions.size();i++){
-                Mission mission1 = missions.get(i);
-                Map<String,Object> listItem = new HashMap<String, Object>();
-                listItem.put("ID",mission1.getObjectId());
-                listItem.put("status",mission1.getStatus());
-                listItem.put("pic",R.drawable.ic_done);
-                listItem.put("title",mission1.getTitle());
-                listItem.put("des",mission1.getDescription());
-                listItems.add(listItem);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return  listItems;
-    }
-
-    private void initAdapter(){
+    private void initAdapter(List<Map<String,Object>> listItems){
         if (simpleAdapter == null){
             simpleAdapter = new SimpleAdapter(this,listItems,
                     R.layout.item_style,
@@ -267,20 +205,53 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
-            initList();
-            initAdapter();
+            new InitListTask().execute(TO_DO);
         }
     }
 
-    class InitListTask extends AsyncTask<String, Integer, List<Map<String,Object>>> {
+    class InitListTask extends AsyncTask<Integer, Integer, List<Map<String,Object>>> {
+        private List<Map<String,Object>> list;
         @Override
-        protected List<Map<String,Object>> doInBackground(String... params) {
-             return initList();
+        protected List<Map<String,Object>> doInBackground(Integer... params) {
+            return getList(params[0]);
         }
 
-        protected void onPostExecute(String result) {
-            initAdapter();
+        protected void onPostExecute(List<Map<String,Object>> result) {
+            initAdapter(result);
         }
+    }
+
+    private List<Map<String,Object>> getList(Integer listType){
+        listItems.clear();
+        if(mission == null){ mission = new Mission();}
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.orderByAscending("title");
+        if (listType == DONE){
+            query.whereEqualTo("status", getResources().getStringArray(R.array.status)[2]);
+        }else {
+            query.whereNotEqualTo("status", getResources().getStringArray(R.array.status)[2]);
+        }
+
+        try {
+            List<Mission> missions = query.find();
+            for (int i=0;i<missions.size();i++){
+                Mission mission1 = missions.get(i);
+                Map<String,Object> listItem = new HashMap<String, Object>();
+                listItem.put("ID",mission1.getObjectId());
+                listItem.put("status",mission1.getStatus());
+                if (listType == DONE){
+                    listItem.put("pic",R.drawable.ic_done);
+                }else{
+                    listItem.put("pic",R.drawable.ic_todo);
+                }
+                listItem.put("title",mission1.getTitle());
+                listItem.put("des",mission1.getDescription());
+                listItems.add(listItem);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  listItems;
     }
 
 }
