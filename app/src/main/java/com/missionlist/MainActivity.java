@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
     private FrameLayout top_head_add;
     private Button btn_to_do;
     private Button btn_done;
+    private ProgressBar pb_main;
     private int tab_type;
     private SimpleAdapter simpleAdapter;
     private ListView list;
@@ -66,8 +68,10 @@ public class MainActivity extends Activity {
         top_head_add = (FrameLayout) findViewById(R.id.top_head_add);
         btn_to_do = (Button) findViewById(R.id.btn_todo);
         btn_done = (Button) findViewById(R.id.btn_done);
+        pb_main = (ProgressBar)findViewById(R.id.progressBar_main);
         list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
+        pb_main.setVisibility(View.VISIBLE);
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +161,7 @@ public class MainActivity extends Activity {
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void prepareSwitch(int target){
+        pb_main.setVisibility(View.VISIBLE);
         if (target == TO_DO){
             tab_type = TO_DO;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_pressed));
@@ -217,6 +222,7 @@ public class MainActivity extends Activity {
         }
 
         protected void onPostExecute(List<Map<String,Object>> result) {
+            pb_main.setVisibility(View.GONE);
             initAdapter(result);
         }
     }
