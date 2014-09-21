@@ -29,9 +29,14 @@
             android:label="@string/title_activity_me" >
         </activity>
         <activity
-            android:theme="@style/MyDialogStyle"
             android:name=".Dialog"
-            android:label="@string/title_activity_dialog" >
+            android:label="@string/title_activity_dialog"
+            android:theme="@style/MyDialogStyle" >
+        </activity>
+        <activity
+            android:name=".Loading"
+            android:label="@string/title_activity_loading"
+            android:theme="@style/MyDialogStyle2">
         </activity>
     </application>
 

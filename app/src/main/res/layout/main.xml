@@ -15,10 +15,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ProgressBar
+    <RelativeLayout
+        android:id="@+id/rl_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar_main"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true">
+        <ProgressBar
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/progressBar_main" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/progressBar_main"
+            android:text="Please wait..."/>
+    </RelativeLayout>
 
 </RelativeLayout>

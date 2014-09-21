@@ -7,5 +7,6 @@
     <string name="title_activity_new">New</string>
     <string name="title_activity_me">MeActivity</string>
     <string name="title_activity_dialog">Dialog</string>
+    <string name="title_activity_loading">Loading</string>
 
 </resources>

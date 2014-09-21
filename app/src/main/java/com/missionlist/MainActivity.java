@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -39,12 +40,14 @@ public class MainActivity extends Activity {
     private FrameLayout top_head_add;
     private Button btn_to_do;
     private Button btn_done;
-    private ProgressBar pb_main;
+    //private ProgressBar pb_main;
+    private RelativeLayout pb_main;
     private int tab_type;
     private SimpleAdapter simpleAdapter;
     private ListView list;
     private final static int TO_DO = 1;
     private final static int DONE = 2;
+    private int listType;
     private GestureDetector gestureDetector;
 
     private static final int ACTIVITY_CREATE = 0;
@@ -59,7 +62,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initView();
-        new InitListTask().execute(TO_DO);
+        listType = TO_DO;
+        new InitListTask().execute(listType);
     }
 
     //Initial view
@@ -68,7 +72,7 @@ public class MainActivity extends Activity {
         top_head_add = (FrameLayout) findViewById(R.id.top_head_add);
         btn_to_do = (Button) findViewById(R.id.btn_todo);
         btn_done = (Button) findViewById(R.id.btn_done);
-        pb_main = (ProgressBar)findViewById(R.id.progressBar_main);
+        pb_main = (RelativeLayout)findViewById(R.id.rl_progressBar);
         list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
         pb_main.setVisibility(View.VISIBLE);
@@ -77,7 +81,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(), "me", Toast.LENGTH_SHORT);
                 //toast.show();
-                Intent intent = new Intent(MainActivity.this,MeActivity.class);
+                //Intent intent = new Intent(MainActivity.this,MeActivity.class);
+                Intent intent = new Intent(MainActivity.this,Loading.class);
                 startActivity(intent);
             }
         });
@@ -95,14 +100,16 @@ public class MainActivity extends Activity {
         btn_to_do.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prepareSwitch(TO_DO);
+                listType = TO_DO;
+                prepareSwitch(listType);
             }
         });
 
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prepareSwitch(DONE);
+                listType = DONE;
+                prepareSwitch(listType);
             }
         });
 
@@ -211,7 +218,7 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
             pb_main.setVisibility(View.VISIBLE);
-            new InitListTask().execute(TO_DO);
+            new InitListTask().execute(listType);
         }
     }
 
