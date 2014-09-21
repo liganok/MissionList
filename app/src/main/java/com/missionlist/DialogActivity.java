@@ -14,7 +14,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 
-public class Dialog extends Activity {
+public class DialogActivity extends Activity {
     private TextView tv_dialog_title;
     private TextView tv_dialog_action;
     private RelativeLayout rl_dialog_set_status;

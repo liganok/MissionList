@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class Loading extends Activity {
+public class LoadingActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

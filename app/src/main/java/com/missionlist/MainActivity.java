@@ -2,7 +2,6 @@ package com.missionlist;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,14 +15,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -82,7 +78,7 @@ public class MainActivity extends Activity {
                 Toast toast=Toast.makeText(getApplicationContext(), "me", Toast.LENGTH_SHORT);
                 //toast.show();
                 //Intent intent = new Intent(MainActivity.this,MeActivity.class);
-                Intent intent = new Intent(MainActivity.this,Loading.class);
+                Intent intent = new Intent(MainActivity.this,LoadingActivity.class);
                 startActivity(intent);
             }
         });
@@ -113,10 +109,18 @@ public class MainActivity extends Activity {
             }
         });
 
+       list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Intent intent = new Intent(MainActivity.this,NewActivity.class);
+               startActivityForResult(intent, ACTIVITY_EDIT);
+           }
+       });
+
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, Dialog.class);
+                Intent intent = new Intent(MainActivity.this, DialogActivity.class);
                 Map<String,Object> listItem = listItems.get(position);
                 intent.putExtra("ID",listItem.get("ID").toString());
                 intent.putExtra("title",listItem.get("title").toString());

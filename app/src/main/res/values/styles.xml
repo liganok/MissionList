@@ -23,14 +23,14 @@
     </style>
 
     <style name="tv_list_title">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:paddingLeft">1dp</item>
         <item name="android:paddingBottom">1dp</item>
         <item name="android:textColor">#333333</item>
     </style>
 
     <style name="tv_list_des">
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:paddingLeft">1dp</item>
         <item name="android:textColor">#999999</item>
         <item name="android:paddingTop">1dp</item>
