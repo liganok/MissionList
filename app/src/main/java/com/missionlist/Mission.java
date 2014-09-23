@@ -14,6 +14,14 @@ import java.util.UUID;
  */
 @ParseClassName("Mission")
 public class Mission extends ParseObject {
+    public static final String ID = "ID";
+    public static final String TITLE = "title";
+    public static final String START_DATE = "start_date";
+    public static final String DUE_DATE = "due_date";
+    public static final String CATEGORY = "category";
+    public static final String PRIORITY = "priority";
+    public static final String DESCRIPTION = "description";
+
     public String getTitle(){return getString("title");}
     public void  setTitle(String title) {put("title",title);}
 

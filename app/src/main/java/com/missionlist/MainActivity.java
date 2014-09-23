@@ -113,6 +113,9 @@ public class MainActivity extends Activity {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Intent intent = new Intent(MainActivity.this,NewActivity.class);
+               Map<String,Object> listItem = listItems.get(position);
+               intent.putExtra("ID",listItem.get("ID").toString());
+               intent.putExtra("status",listItem.get("status").toString());
                startActivityForResult(intent, ACTIVITY_EDIT);
            }
        });

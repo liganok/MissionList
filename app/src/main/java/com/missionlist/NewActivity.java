@@ -1,24 +1,20 @@
 package com.missionlist;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
-import com.missionlist.R;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+import com.missionlist.com.missionlist.util.Util;
 
 public class NewActivity extends Activity {
     private Mission mission;
-    private String missionId = null;
+    private String ID = null;
     private EditText title;
     private EditText start_date;
     private EditText due_date;
@@ -28,6 +24,10 @@ public class NewActivity extends Activity {
     private EditText description;
     private FrameLayout save;
     private FrameLayout close;
+    private RelativeLayout rl_loading_unblock;
+
+    private static final int MISSION_DETAIL = 3;
+    private static final int MISSION_CREATE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,18 @@ public class NewActivity extends Activity {
     }
 
     private void initView(){
-         //todo initial the date for view
+         //Fetch the data from extra data
+        ID = null;
+        /*if (getIntent().hasExtra(Mission.ID)){
+            ID = getIntent().getExtras().getString(Mission.ID);
+            Intent intent = new Intent(this,LoadingActivity.class);
+            intent.putExtra(MListApp.REQ_TYPE, MListApp.REQ_ITEM_DETAIL);
+            intent.putExtra(Mission.ID,ID);
+            startActivityForResult(intent,MISSION_DETAIL);
+        }*/
+
+        rl_loading_unblock = (RelativeLayout)findViewById(R.id.rl_loading_unblock);
+        rl_loading_unblock.setVisibility(View.VISIBLE);
 
         save = (FrameLayout)findViewById(R.id.fl_head_save);
         close = (FrameLayout)findViewById(R.id.fl_head_close);
@@ -53,38 +64,21 @@ public class NewActivity extends Activity {
                 occurrence = (EditText)findViewById(R.id.et_new_occurrence);
                 description = (EditText)findViewById(R.id.et_new_des);
 
-                if(mission == null){
-                    mission = new Mission();
-                }
-                mission.setTitle(title.getText().toString());
-                mission.setPriority(priority.getText().toString());
-                mission.setOccurrence(occurrence.getText().toString());
-                mission.setDescription(description.getText().toString());
-               // mission.setAuthor(ParseUser.getCurrentUser());
-                mission.setStatus("New");
-                mission.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (isFinishing()) {
-                            return;
-                        }
-                        if (e == null) {
-                            setResult(Activity.RESULT_OK);
-                            finish();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "Error saving: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                Intent intent = new Intent(NewActivity.this,LoadingActivity.class);
+                intent.putExtra("title", title.getText().toString());
+                intent.putExtra("title",title.toString());
+                intent.putExtra("title",title.toString());
+                intent.putExtra("title",title.toString());
+                intent.putExtra("title",title.toString());
+
             }
         });
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                rl_loading_unblock.setVisibility(View.INVISIBLE);
+                //finish();
             }
         });
     }
@@ -98,14 +92,21 @@ public class NewActivity extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == MISSION_DETAIL){
+                if (intent.hasExtra("title")){
+                    title.setText(intent.getExtras().getString("title"));
+                }
+                if (intent.hasExtra("description")){
+                    description.setText(intent.getExtras().getString("description"));
+                }
+            }
+
+            if (requestCode == MISSION_CREATE){
+                finish();
+            }
         }
-        return super.onOptionsItemSelected(item);
     }
 }

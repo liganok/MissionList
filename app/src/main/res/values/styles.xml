@@ -127,7 +127,7 @@
         <item name="android:paddingRight">20dp</item>
     </style>
 
-    <style name="MyDialogStyle2">
+    <style name="Loading_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>

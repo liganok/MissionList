@@ -10,10 +10,15 @@ import com.parse.ParseUser;
 /**
  * Created by Administrator on 2014/9/11.
  */
-public class MissionListApplication extends Application {
+public class MListApp extends Application {
     private static final String APPLICATION_ID = "zNx5pC3cWCUVI3vvPeCEXK6EJuhpe3E4GXvK3Dvt";
     private static final String CLIENT_KEY = "8OucbO7SHfnr31mDcK6BKfga0Z8RWCYUEv0yn4qJ";
     public static final String MISSION = "Mission";
+
+    public static final String REQ_TYPE =  "REQ_TYPE";
+    public static final int REQ_ITEM_DETAIL =  0;
+    public static final int REQ_ITEM_NEW =  1;
+    public static final int REQ_ITEM_EDIT =  2;
 
     public void onCreate(){
         super.onCreate();

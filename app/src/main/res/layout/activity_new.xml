@@ -100,7 +100,11 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_loading_unblock">
+        <include layout = "@layout/activity_loading"/>
+    </RelativeLayout>
 
 </RelativeLayout>
