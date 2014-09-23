@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
             tab_type = DONE;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_nomal));
             btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_pressed));
-            new InitListTask().execute(DONE);;
+            new InitListTask().execute(DONE);
         }
     }
 
@@ -246,17 +246,17 @@ public class MainActivity extends Activity {
         listItems.clear();
         if(mission == null){ mission = new Mission();}
         ParseQuery<Mission> query = Mission.getQuery();
-        query.orderByAscending("title");
+        query.orderByAscending(Mission.TITLE);
         if (listType == DONE){
-            query.whereEqualTo("status", getResources().getStringArray(R.array.status)[2]);
+            query.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }else {
-            query.whereNotEqualTo("status", getResources().getStringArray(R.array.status)[2]);
+            query.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }
 
         try {
             List<Mission> missions = query.find();
-            for (int i=0;i<missions.size();i++){
-                Mission mission1 = missions.get(i);
+            for (final Mission mission1:missions){
+                //Mission mission1 = missions.get(i);
                 Map<String,Object> listItem = new HashMap<String, Object>();
                 listItem.put("ID",mission1.getObjectId());
                 listItem.put("status",mission1.getStatus());

@@ -55,7 +55,7 @@ public class DialogActivity extends Activity {
                         @Override
                         public void done(Mission object, ParseException e) {
                             if (e == null) {
-                                object.setStatus(getResources().getStringArray(R.array.status)[1].toString());
+                                object.setStatus(getResources().getIntArray(R.array.status)[1]);
                                 object.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -75,7 +75,7 @@ public class DialogActivity extends Activity {
                         @Override
                         public void done(Mission object, ParseException e) {
                             if (e == null) {
-                                object.setStatus(getResources().getStringArray(R.array.status)[2].toString());
+                                object.setStatus(getResources().getIntArray(R.array.status)[2]);
                                 object.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {

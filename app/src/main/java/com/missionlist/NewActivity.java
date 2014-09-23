@@ -3,6 +3,7 @@ package com.missionlist;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -11,9 +12,15 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.missionlist.com.missionlist.util.Util;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewActivity extends Activity {
-    private Mission mission;
+    //private Mission mission;
     private String ID = null;
     private EditText title;
     private EditText start_date;
@@ -37,50 +44,43 @@ public class NewActivity extends Activity {
     }
 
     private void initView(){
-         //Fetch the data from extra data
-        ID = null;
-        /*if (getIntent().hasExtra(Mission.ID)){
-            ID = getIntent().getExtras().getString(Mission.ID);
-            Intent intent = new Intent(this,LoadingActivity.class);
-            intent.putExtra(MListApp.REQ_TYPE, MListApp.REQ_ITEM_DETAIL);
-            intent.putExtra(Mission.ID,ID);
-            startActivityForResult(intent,MISSION_DETAIL);
-        }*/
-
+        title = (EditText)findViewById(R.id.et_new_title);
+        start_date = (EditText)findViewById(R.id.et_new_start_date);
+        due_date = (EditText)findViewById(R.id.et_new_due_date);
+        priority = (EditText)findViewById(R.id.et_priority);
+        occurrence = (EditText)findViewById(R.id.et_new_occurrence);
+        description = (EditText)findViewById(R.id.et_new_des);
         rl_loading_unblock = (RelativeLayout)findViewById(R.id.rl_loading_unblock);
-        rl_loading_unblock.setVisibility(View.VISIBLE);
-
         save = (FrameLayout)findViewById(R.id.fl_head_save);
         close = (FrameLayout)findViewById(R.id.fl_head_close);
+
+        //Fetch the data from extra data
+        if (getIntent().hasExtra(Mission.ID)){
+            ID = getIntent().getExtras().getString(Mission.ID);
+            new processDataTask().execute(MListApp.REQ_ITEM_DETAIL);
+        }else {
+            rl_loading_unblock.setVisibility(View.INVISIBLE);
+        }
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
-                title = (EditText)findViewById(R.id.et_new_title);
-                start_date = (EditText)findViewById(R.id.et_new_start_date);
-                due_date = (EditText)findViewById(R.id.et_new_due_date);
-                priority = (EditText)findViewById(R.id.et_priority);
-                occurrence = (EditText)findViewById(R.id.et_new_occurrence);
-                description = (EditText)findViewById(R.id.et_new_des);
-
-                Intent intent = new Intent(NewActivity.this,LoadingActivity.class);
-                intent.putExtra("title", title.getText().toString());
-                intent.putExtra("title",title.toString());
-                intent.putExtra("title",title.toString());
-                intent.putExtra("title",title.toString());
-                intent.putExtra("title",title.toString());
-
+                if (getIntent().hasExtra(Mission.ID)){
+                    ID = getIntent().getExtras().getString(Mission.ID);
+                    new processDataTask().execute(MListApp.REQ_ITEM_EDIT);
+                }else{
+                    new processDataTask().execute(MListApp.REQ_ITEM_NEW);
+                }
             }
         });
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rl_loading_unblock.setVisibility(View.INVISIBLE);
-                //finish();
+                finish();
             }
         });
+
     }
 
 
@@ -91,22 +91,113 @@ public class NewActivity extends Activity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == MISSION_DETAIL){
-                if (intent.hasExtra("title")){
-                    title.setText(intent.getExtras().getString("title"));
-                }
-                if (intent.hasExtra("description")){
-                    description.setText(intent.getExtras().getString("description"));
-                }
+    class processDataTask extends AsyncTask<Integer, Integer, Map<String,Object>> {
+
+        protected void onPreExecute(){
+            rl_loading_unblock.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Map<String,Object> doInBackground(Integer... params) {
+            Map<String,Object> mapObject = new HashMap<String, Object>();
+            switch (params[0]){
+                case MListApp.REQ_ITEM_DETAIL:
+                    mapObject = getItemDetail(ID);
+                    break;
+                case MListApp.REQ_ITEM_NEW:
+                    mapObject = saveItemNew();
+                    break;
+                case MListApp.REQ_ITEM_EDIT:
+                    break;
             }
 
-            if (requestCode == MISSION_CREATE){
-                finish();
-            }
+            return mapObject;
         }
+
+        protected void onPostExecute(Map<String,Object> result) {
+            int reqType = Integer.parseInt(result.get(MListApp.REQ_TYPE).toString());
+            switch (reqType){
+                case MListApp.REQ_ITEM_DETAIL:
+                    if (result.get(Mission.TITLE) != null){
+                        title.setText(result.get(Mission.TITLE).toString());
+                    }
+
+                    if (result.get(Mission.DESCRIPTION) != null){
+                        description.setText(result.get(Mission.DESCRIPTION).toString());
+                    }
+
+                    if (result.get(Mission.PRIORITY) != null){
+                        priority.setText(result.get(Mission.PRIORITY).toString());
+                    }
+
+                    if (result.get(Mission.DUE_DATE) != null){
+                        due_date.setText(result.get(Mission.DUE_DATE).toString());
+                    }
+
+                    if (result.get(Mission.OCCURRENCE) != null){
+                        occurrence.setText(result.get(Mission.OCCURRENCE).toString());
+                    }
+                    rl_loading_unblock.setVisibility(View.INVISIBLE);
+                    break;
+                case MListApp.REQ_ITEM_NEW:
+                    rl_loading_unblock.setVisibility(View.INVISIBLE);
+                    if (result.containsKey(MListApp.REQ_STATUS)){
+                        NewActivity.this.finish();
+                    }
+                    break;
+                case MListApp.REQ_ITEM_EDIT:
+                    break;
+            }
+
+        }
+    }
+
+    //Implementation of AsyncTask
+    private Map<String,Object> getItemDetail(String ID){
+        Map<String,Object> mapObject = new HashMap<String, Object>();
+        ParseQuery<Mission> query = Mission.getQuery();
+        try {
+            Mission mission = query.get(ID);
+            mapObject.put(MListApp.REQ_TYPE,MListApp.REQ_ITEM_DETAIL);
+            mapObject.put(Mission.ID,mission.getObjectId());
+            mapObject.put(Mission.TITLE,mission.getTitle());
+            mapObject.put(Mission.DESCRIPTION,mission.getDescription());
+            mapObject.put(Mission.CATEGORY,mission.getCategory());
+            mapObject.put(Mission.DUE_DATE,mission.getDueDate());
+            mapObject.put(Mission.IS_DRAFT,mission.getDraft());
+            mapObject.put(Mission.START_DATE,mission.getStartDate());
+            mapObject.put(Mission.PRIORITY,mission.getPriority());
+            mapObject.put(Mission.STATUS,mission.getStatus());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return mapObject;
+    }
+
+    private Map<String,Object> saveItemEdit(){
+        Map<String,Object> mapObject = new HashMap<String, Object>();
+
+        return mapObject;
+    }
+
+    private Map<String,Object> saveItemNew(){
+        final Map<String,Object> mapObject = new HashMap<String, Object>();
+        Mission mission = new Mission();
+        mission.put(Mission.TITLE,title.getText().toString());
+        mission.put(Mission.DESCRIPTION,description.getText().toString());
+        //mission.put(Mission.START_DATE,start_date.getText().toString());
+        mission.put(Mission.IS_DRAFT,false);
+        mission.put(Mission.OCCURRENCE,occurrence.getText().toString());
+        mission.put(Mission.STATUS,getResources().getIntArray(R.array.status)[0]);
+        mission.put(Mission.PRIORITY,Integer.parseInt(priority.getText().toString()));
+
+        mapObject.put(MListApp.REQ_TYPE,MListApp.REQ_ITEM_NEW);
+        try {
+            mission.save();
+            mapObject.put(MListApp.REQ_STATUS,true);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return mapObject;
     }
 }

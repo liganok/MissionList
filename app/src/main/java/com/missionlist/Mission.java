@@ -21,6 +21,9 @@ public class Mission extends ParseObject {
     public static final String CATEGORY = "category";
     public static final String PRIORITY = "priority";
     public static final String DESCRIPTION = "description";
+    public static final String IS_DRAFT = "isDraft";
+    public static final String STATUS = "status";
+    public static final String OCCURRENCE = "occurrence";
 
     public String getTitle(){return getString("title");}
     public void  setTitle(String title) {put("title",title);}
@@ -34,8 +37,8 @@ public class Mission extends ParseObject {
     public String getCategory(){return getString("category");}
     public void  setCategory(String category) {put("category",category);}
 
-    public String getPriority(){return getString("priority");}
-    public void  setPriority(String priority) {put("priority",priority);}
+    public int getPriority(){return getInt("priority");}
+    public void  setPriority(int priority) {put("priority",priority);}
 
     public String getOccurrence(){return getString("occurrence");}
     public void  setOccurrence(String occurrence) {put("occurrence",occurrence);}
@@ -43,8 +46,11 @@ public class Mission extends ParseObject {
     public String getDescription(){return getString("description");}
     public void  setDescription(String description) {put("description",description);}
 
-    public String getStatus(){return getString("status");}
-    public void  setStatus(String status) {put("status",status);}
+    public int getStatus(){return getInt("status");}
+    public void  setStatus(int status) {put("status",status);}
+
+    public boolean getDraft(){return getBoolean("isDraft");}
+    public void  setDraft(boolean isDraft) {put("isDraft",isDraft);}
 
     /*public ParseUser getAuthor() {
         return getParseUser("author");

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="status">
-        <item>NEW</item>
-        <item>IN PROCESS</item>
-        <item>DONE</item>
-    </string-array>
+    <integer-array name="status">
+        <item>-1</item> <!--New-->
+        <item>0</item> <!--In process-->
+        <item>1</item> <!--Done-->
+    </integer-array>
+
+    <integer-array name="priority">
+        <item>-1</item> <!--Low-->
+        <item>0</item> <!--Medium-->
+        <item>1</item> <!--High-->
+    </integer-array>
 </resources>
