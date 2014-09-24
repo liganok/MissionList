@@ -8,5 +8,8 @@
     <string name="title_activity_me">MeActivity</string>
     <string name="title_activity_dialog">Dialog</string>
     <string name="title_activity_loading">Loading</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="btn_signin">Sign In</string>
+    <string name="btn_signup">Sign Up</string>
 
 </resources>

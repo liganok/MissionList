@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.missionlist.model.Mission;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -58,8 +59,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        listType = TO_DO;
-        new InitListTask().execute(listType);
     }
 
     //Initial view
@@ -72,13 +71,14 @@ public class MainActivity extends Activity {
         list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
         pb_main.setVisibility(View.VISIBLE);
+        new InitListTask().execute(listType);
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(), "me", Toast.LENGTH_SHORT);
                 //toast.show();
                 //Intent intent = new Intent(MainActivity.this,MeActivity.class);
-                Intent intent = new Intent(MainActivity.this,LoadingActivity.class);
+                Intent intent = new Intent(MainActivity.this,MeActivity.class);
                 startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT);
                 //toast.show();
-                Intent intent = new Intent(MainActivity.this,NewActivity.class);
+                Intent intent = new Intent(MainActivity.this,ItemActivity.class);
                 startActivityForResult(intent, ACTIVITY_CREATE);
             }
         });
@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Intent intent = new Intent(MainActivity.this,NewActivity.class);
+               Intent intent = new Intent(MainActivity.this,ItemActivity.class);
                Map<String,Object> listItem = listItems.get(position);
                intent.putExtra("ID",listItem.get("ID").toString());
                intent.putExtra("status",listItem.get("status").toString());
@@ -224,13 +224,17 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
-            pb_main.setVisibility(View.VISIBLE);
             new InitListTask().execute(listType);
         }
     }
 
     class InitListTask extends AsyncTask<Integer, Integer, List<Map<String,Object>>> {
         private List<Map<String,Object>> list;
+
+        protected void onPreExecute(){
+            pb_main.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected List<Map<String,Object>> doInBackground(Integer... params) {
             return getList(params[0]);

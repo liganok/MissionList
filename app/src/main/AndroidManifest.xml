@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewActivity"
+            android:name=".ItemActivity"
             android:label="@string/title_activity_new" >
         </activity>
         <activity
@@ -34,9 +34,8 @@
             android:theme="@style/MyDialogStyle" >
         </activity>
         <activity
-            android:name=".LoadingActivity"
-            android:label="@string/title_activity_loading"
-            android:theme="@style/Loading_dialog">
+            android:name=".SignInActivity"
+            android:label="@string/title_activity_sign_in" >
         </activity>
     </application>
 

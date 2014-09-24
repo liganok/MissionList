@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/et_username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:singleLine="true"
+        android:hint="用户名 / 手机号码 / 邮箱"/>
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/et_password"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_username"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:password="true"
+        android:singleLine="true"
+        android:hint="请输入密码"/>
+
+    <Button
+        style="@style/BtnText"
+        android:id="@+id/btn_signin"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/btn_signin"
+        android:textColor="#ffffff"
+        android:background="@drawable/btn_login"
+        android:textSize="20sp"
+        android:layout_below="@+id/et_password"/>
+    <Button
+        style="@style/BtnText"
+        android:id="@+id/btn_signup"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/btn_signup"
+        android:textColor="#ffffff"
+        android:background="@drawable/btn_signup"
+        android:textSize="20sp"
+        android:layout_below="@+id/btn_signin"/>
+
+</RelativeLayout>

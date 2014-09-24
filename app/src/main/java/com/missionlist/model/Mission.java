@@ -1,11 +1,10 @@
-package com.missionlist;
+package com.missionlist.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ public class Mission extends ParseObject {
     public static final String IS_DRAFT = "isDraft";
     public static final String STATUS = "status";
     public static final String OCCURRENCE = "occurrence";
+    public static final String USERNAME = "userName";
 
     public String getTitle(){return getString("title");}
     public void  setTitle(String title) {put("title",title);}
@@ -52,12 +52,8 @@ public class Mission extends ParseObject {
     public boolean getDraft(){return getBoolean("isDraft");}
     public void  setDraft(boolean isDraft) {put("isDraft",isDraft);}
 
-    /*public ParseUser getAuthor() {
-        return getParseUser("author");
-    }
-    public void setAuthor(ParseUser currentUser) {
-        put("author", currentUser);
-    }*/
+    public ParseUser getAuthor() {return getParseUser("username"); }
+    public void setAuthor(ParseUser currentUser) {put("username", currentUser); }
 
     public void setUuidString() {
         UUID uuid = UUID.randomUUID();

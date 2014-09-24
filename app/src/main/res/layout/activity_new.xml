@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_bg_color"
-    tools:context="com.missionlist.NewActivity">
+    tools:context="com.missionlist.ItemActivity">
     <include layout = "@layout/new_head"
         android:id="@+id/include1" />
 
@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rl_loading_unblock">
-        <include layout = "@layout/activity_loading"/>
+        <include layout = "@layout/loading"/>
     </RelativeLayout>
 
 </RelativeLayout>

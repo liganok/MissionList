@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.missionlist.model.Mission;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -20,7 +21,7 @@ public class DialogActivity extends Activity {
     private RelativeLayout rl_dialog_set_status;
     private RelativeLayout rl_dialog_delete;
 
-    private String status;
+    private int status;
     private String ID;
     private Mission mission;
     @Override
@@ -36,10 +37,10 @@ public class DialogActivity extends Activity {
         tv_dialog_action = (TextView)findViewById(R.id.tv_dialog_action);
         rl_dialog_set_status = (RelativeLayout)findViewById(R.id.rl_dialog_set_status);
         rl_dialog_delete = (RelativeLayout)findViewById(R.id.rl_dialog_delete);
-        status = getIntent().getExtras().getString("status");
-        final String status_done = getResources().getStringArray(R.array.status)[2];
+        status = Integer.parseInt(getIntent().getExtras().getString("status"));
+        final int status_done = getResources().getIntArray(R.array.status)[2];
         ID = getIntent().getExtras().getString("ID");
-        if (status.equals(status_done)){
+        if (status == status_done){
             tv_dialog_action.setText("Reset to in process");
         }else{
             tv_dialog_action.setText("Set to done");
@@ -48,7 +49,7 @@ public class DialogActivity extends Activity {
         rl_dialog_set_status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status.equals(status_done)){
+                if (status == status_done){
                     ParseQuery<Mission> query = Mission.getQuery();
                     query.whereEqualTo("objectId",ID);
                     query.getFirstInBackground(new GetCallback<Mission>() {

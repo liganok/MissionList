@@ -2,6 +2,7 @@ package com.missionlist;
 
 import android.app.Application;
 
+import com.missionlist.model.Mission;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseObject;

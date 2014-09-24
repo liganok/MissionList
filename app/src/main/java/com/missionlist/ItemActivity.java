@@ -1,8 +1,6 @@
 package com.missionlist;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,15 +9,14 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.missionlist.com.missionlist.util.Util;
+import com.missionlist.model.Mission;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewActivity extends Activity {
+public class ItemActivity extends Activity {
     //private Mission mission;
     private String ID = null;
     private EditText title;
@@ -143,14 +140,14 @@ public class NewActivity extends Activity {
                     rl_loading_unblock.setVisibility(View.INVISIBLE);
                     if (result.containsKey(MListApp.REQ_STATUS)){
                         setResult(Activity.RESULT_OK);
-                        NewActivity.this.finish();
+                        ItemActivity.this.finish();
                     }
                     break;
                 case MListApp.REQ_ITEM_EDIT:
                     rl_loading_unblock.setVisibility(View.INVISIBLE);
                     if (result.containsKey(MListApp.REQ_STATUS)){
                         setResult(Activity.RESULT_OK);
-                        NewActivity.this.finish();
+                        ItemActivity.this.finish();
                     }
                     break;
             }
