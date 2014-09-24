@@ -142,10 +142,16 @@ public class NewActivity extends Activity {
                 case MListApp.REQ_ITEM_NEW:
                     rl_loading_unblock.setVisibility(View.INVISIBLE);
                     if (result.containsKey(MListApp.REQ_STATUS)){
+                        setResult(Activity.RESULT_OK);
                         NewActivity.this.finish();
                     }
                     break;
                 case MListApp.REQ_ITEM_EDIT:
+                    rl_loading_unblock.setVisibility(View.INVISIBLE);
+                    if (result.containsKey(MListApp.REQ_STATUS)){
+                        setResult(Activity.RESULT_OK);
+                        NewActivity.this.finish();
+                    }
                     break;
             }
 
@@ -176,7 +182,22 @@ public class NewActivity extends Activity {
 
     private Map<String,Object> saveItemEdit(){
         Map<String,Object> mapObject = new HashMap<String, Object>();
+        mapObject.put(MListApp.REQ_TYPE,MListApp.REQ_ITEM_NEW);
+        ParseQuery<Mission> query = Mission.getQuery();
+        try {
+            Mission mission = query.get(ID);
+            mapObject.put(MListApp.REQ_STATUS,true);
+            if (!(mission.get(Mission.TITLE).equals(title.getText().toString()))){
+                mission.put(Mission.TITLE,title.getText().toString());
+            }
 
+            if (!(mission.get(Mission.DESCRIPTION).equals(description.getText().toString()))){
+                mission.put(Mission.DESCRIPTION,description.getText().toString());
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return mapObject;
     }
 

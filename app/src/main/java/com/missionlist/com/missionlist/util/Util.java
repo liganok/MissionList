@@ -20,6 +20,14 @@ public class Util {
         return loadingDialog;
     }
 
+    public static int getNetworkStatus(){
+        return 0;
+    }
+
+    public static void showMessage(String msg){
+
+    }
+
 
 
 
