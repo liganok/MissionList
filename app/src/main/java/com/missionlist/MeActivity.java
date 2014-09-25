@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.missionlist.R;
 
 public class MeActivity extends Activity {
+    private static final int REQ_CODE_SIGN_IN = 0;
     private Button userSign;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,27 +26,19 @@ public class MeActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MeActivity.this,SignInActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQ_CODE_SIGN_IN);
             }
         });
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.me, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode){
+                case REQ_CODE_SIGN_IN:
+                    break;
+            }
         }
-        return super.onOptionsItemSelected(item);
     }
 }

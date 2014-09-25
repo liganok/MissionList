@@ -3,6 +3,7 @@ package com.missionlist;
 import android.app.Application;
 
 import com.missionlist.model.Mission;
+import com.missionlist.model.User;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseObject;
@@ -25,6 +26,7 @@ public class MListApp extends Application {
     public void onCreate(){
         super.onCreate();
         ParseObject.registerSubclass(Mission.class);
+        ParseObject.registerSubclass(User.class);
 
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
         ParseUser.enableAutomaticUser();
