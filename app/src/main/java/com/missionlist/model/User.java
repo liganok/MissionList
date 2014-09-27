@@ -16,11 +16,9 @@ public class User extends ParseUser {
     public static final String ID = "ID";
     public static final String EMAIL = "email";
     public static final String USERNAME = "userName";
+    public static final String AUTHOR = "author";
 
-    public String getTitle(){return getString("title");}
-    public void  setTitle(String title) {put("title",title);}
-
-    public Date getStartDate(){return getDate("start_date");}
-    public void setStartDate(Date start_date){put("start_date",start_date);}
+    public ParseUser getAuthor() {return getParseUser("author"); }
+    public void setAuthor(ParseUser currentUser) {put("author", currentUser); }
 
 }

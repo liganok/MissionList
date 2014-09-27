@@ -7,12 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.missionlist.R;
+import com.parse.ParseUser;
 
 public class MeActivity extends Activity {
-    private static final int REQ_CODE_SIGN_IN = 0;
+
     private Button userSign;
+    private TextView username_me;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +25,16 @@ public class MeActivity extends Activity {
 
     private void initView(){
         userSign = (Button)findViewById(R.id.btn_user );
+        username_me = (TextView)findViewById(R.id.username_me);
+        if (ParseUser.getCurrentUser() != null){
+            username_me.setText(ParseUser.getCurrentUser().getUsername());
+        }
+
         userSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MeActivity.this,SignInActivity.class);
-                startActivityForResult(intent,REQ_CODE_SIGN_IN);
+                startActivityForResult(intent,MListApp.REQ_SIGN_IN);
             }
         });
     }
@@ -35,9 +43,10 @@ public class MeActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
-            switch (requestCode){
-                case REQ_CODE_SIGN_IN:
-                    break;
+            if (requestCode == MListApp.REQ_SIGN_IN){
+                ParseUser user = ParseUser.getCurrentUser();
+                user.getUsername();
+                username_me.setText(user.getUsername());
             }
         }
     }

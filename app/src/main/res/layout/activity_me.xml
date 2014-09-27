@@ -19,5 +19,13 @@
             android:layout_centerHorizontal="true"
             android:text="Sign In"
             android:id="@+id/btn_user" />
+
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/username_me" />
 </RelativeLayout>

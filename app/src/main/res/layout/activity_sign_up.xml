@@ -7,7 +7,7 @@
 
     <EditText
         style="@style/EditText"
-        android:id="@+id/et_username"
+        android:id="@+id/et_username_signup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -17,10 +17,10 @@
         android:hint="用户名 / 手机号码 / 邮箱"/>
     <EditText
         style="@style/EditText"
-        android:id="@+id/et_password"
+        android:id="@+id/et_password_signup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_username"
+        android:layout_below="@+id/et_username_signup"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -30,20 +30,7 @@
 
     <Button
         style="@style/BtnText"
-        android:id="@+id/btn_signin"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="@string/btn_signin"
-        android:textColor="#ffffff"
-        android:background="@drawable/btn_login"
-        android:textSize="20sp"
-        android:layout_below="@+id/et_password"/>
-    <Button
-        style="@style/BtnText"
-        android:id="@+id/btn_for_signup"
+        android:id="@+id/btn_signup"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
@@ -53,6 +40,6 @@
         android:textColor="#ffffff"
         android:background="@drawable/btn_signup"
         android:textSize="20sp"
-        android:layout_below="@+id/btn_signin"/>
+        android:layout_below="@+id/et_password_signup"/>
 
 </RelativeLayout>

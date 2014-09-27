@@ -21,6 +21,8 @@ public class MListApp extends Application {
     public static final int REQ_ITEM_DETAIL =  0;
     public static final int REQ_ITEM_NEW =  1;
     public static final int REQ_ITEM_EDIT =  2;
+    public static final int REQ_SIGN_UP = 3;
+    public static final int REQ_SIGN_IN = 4;
     public static final String REQ_STATUS = "STATUS";
 
     public void onCreate(){

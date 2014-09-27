@@ -23,7 +23,7 @@ public class Mission extends ParseObject {
     public static final String IS_DRAFT = "isDraft";
     public static final String STATUS = "status";
     public static final String OCCURRENCE = "occurrence";
-    public static final String USERNAME = "userName";
+    public static final String AUTHOR = "author";
 
     public String getTitle(){return getString("title");}
     public void  setTitle(String title) {put("title",title);}
@@ -52,8 +52,8 @@ public class Mission extends ParseObject {
     public boolean getDraft(){return getBoolean("isDraft");}
     public void  setDraft(boolean isDraft) {put("isDraft",isDraft);}
 
-    public ParseUser getAuthor() {return getParseUser("username"); }
-    public void setAuthor(ParseUser currentUser) {put("username", currentUser); }
+    public ParseUser getAuthor() {return getParseUser("author"); }
+    public void setAuthor(ParseUser currentUser) {put("author", currentUser); }
 
     public void setUuidString() {
         UUID uuid = UUID.randomUUID();
