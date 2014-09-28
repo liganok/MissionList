@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.missionlist.model.Mission;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,12 +82,6 @@ public class ItemActivity extends Activity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.new_item, menu);
-        return true;
-    }
 
     class processDataTask extends AsyncTask<Integer, Integer, Map<String,Object>> {
 
@@ -208,7 +203,7 @@ public class ItemActivity extends Activity {
         mission.put(Mission.OCCURRENCE,occurrence.getText().toString());
         mission.put(Mission.STATUS,getResources().getIntArray(R.array.status)[0]);
         mission.put(Mission.PRIORITY,Integer.parseInt(priority.getText().toString()));
-
+        mission.setAuthor(ParseUser.getCurrentUser());
         mapObject.put(MListApp.REQ_TYPE,MListApp.REQ_ITEM_NEW);
         try {
             mission.save();

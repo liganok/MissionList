@@ -45,6 +45,7 @@ public class SignInActivity extends Activity {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
                         if (e==null){
+                            dialog.cancel();
                             setResult(Activity.RESULT_OK);
                             Util.showMessage(getApplicationContext(),"Success sign in", Toast.LENGTH_SHORT);
                             finish();

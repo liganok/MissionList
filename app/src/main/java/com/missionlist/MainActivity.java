@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.missionlist.model.Mission;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -250,6 +251,7 @@ public class MainActivity extends Activity {
         listItems.clear();
         if(mission == null){ mission = new Mission();}
         ParseQuery<Mission> query = Mission.getQuery();
+        query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
         query.orderByAscending(Mission.TITLE);
         if (listType == DONE){
             query.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
