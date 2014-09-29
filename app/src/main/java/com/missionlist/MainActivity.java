@@ -20,7 +20,9 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.missionlist.model.Mission;
+import com.missionlist.util.Util;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -33,7 +35,6 @@ import java.util.Map;
 public class MainActivity extends Activity {
 
     //Variable
-    private Mission mission;
     private FrameLayout top_head_me;
     private FrameLayout top_head_add;
     private Button btn_to_do;
@@ -117,6 +118,8 @@ public class MainActivity extends Activity {
                Map<String,Object> listItem = listItems.get(position);
                intent.putExtra("ID",listItem.get("ID").toString());
                intent.putExtra("status",listItem.get("status").toString());
+               intent.putExtra(Mission.DESCRIPTION,listItem.get(Mission.DESCRIPTION).toString());
+               intent.putExtra(Mission.PRIORITY,listItem.get(Mission.PRIORITY).toString());
                startActivityForResult(intent, ACTIVITY_EDIT);
            }
        });
@@ -249,7 +252,6 @@ public class MainActivity extends Activity {
 
     private List<Map<String,Object>> getList(Integer listType){
         listItems.clear();
-        if(mission == null){ mission = new Mission();}
         ParseQuery<Mission> query = Mission.getQuery();
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
         query.orderByAscending(Mission.TITLE);
@@ -259,25 +261,71 @@ public class MainActivity extends Activity {
             query.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }
 
-        try {
-            List<Mission> missions = query.find();
-            for (final Mission mission1:missions){
-                //Mission mission1 = missions.get(i);
-                Map<String,Object> listItem = new HashMap<String, Object>();
-                listItem.put("ID",mission1.getObjectId());
-                listItem.put("status",mission1.getStatus());
-                if (listType == DONE){
-                    listItem.put("pic",R.drawable.ic_done);
-                }else{
-                    listItem.put("pic",R.drawable.ic_todo);
+        if (Util.isNetworkConnected(getApplicationContext())){
+            try {
+                List<Mission> missions = query.find();
+                ParseObject.pinAllInBackground((List<Mission>)missions);
+                for (final Mission mission1:missions){
+                    //Mission mission1 = missions.get(i);
+                    Map<String,Object> listItem = new HashMap<String, Object>();
+                    listItem.put("ID",mission1.getObjectId());
+                    listItem.put("status",mission1.getStatus());
+                    if (listType == DONE){
+                        listItem.put("pic",R.drawable.ic_done);
+                    }else{
+                        listItem.put("pic",R.drawable.ic_todo);
+                    }
+                    listItem.put("title",mission1.getTitle());
+                    listItem.put("des",mission1.getDescription());
+                    listItems.add(listItem);
                 }
-                listItem.put("title",mission1.getTitle());
-                listItem.put("des",mission1.getDescription());
-                listItems.add(listItem);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            try {
+                List<Mission> missions2 = query.find();
+                for (final Mission mission1:missions2){
+                    //Mission mission1 = missions.get(i);
+                    Map<String,Object> listItem = new HashMap<String, Object>();
+                    listItem.put("ID",mission1.getObjectId());
+                    listItem.put("status",mission1.getStatus());
+                    if (listType == DONE){
+                        listItem.put("pic",R.drawable.ic_done);
+                    }else{
+                        listItem.put("pic",R.drawable.ic_todo);
+                    }
+                    listItem.put("title",mission1.getTitle());
+                    listItem.put("des",mission1.getDescription());
+                    listItems.add(listItem);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+            //Util.showMessage(getApplicationContext(),"Network connection failed", Toast.LENGTH_SHORT);
+            query.fromLocalDatastore();
+            try {
+                List<Mission> missions = query.find();
+                for (final Mission mission1:missions){
+                    //Mission mission1 = missions.get(i);
+                    Map<String,Object> listItem = new HashMap<String, Object>();
+                    listItem.put("ID",mission1.getObjectId());
+                    listItem.put("status",mission1.getStatus());
+                    if (listType == DONE){
+                        listItem.put("pic",R.drawable.ic_done);
+                    }else{
+                        listItem.put("pic",R.drawable.ic_todo);
+                    }
+                    listItem.put("title",mission1.getTitle());
+                    listItem.put("des",mission1.getDescription());
+                    listItems.add(listItem);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+
         return  listItems;
     }
 
