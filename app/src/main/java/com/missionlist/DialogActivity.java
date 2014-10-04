@@ -51,40 +51,41 @@ public class DialogActivity extends Activity {
             public void onClick(View v) {
                 if (status == status_done){
                     ParseQuery<Mission> query = Mission.getQuery();
+                    query.fromLocalDatastore();
                     query.whereEqualTo("objectId",ID);
                     query.getFirstInBackground(new GetCallback<Mission>() {
                         @Override
                         public void done(Mission object, ParseException e) {
                             if (e == null) {
                                 object.setStatus(getResources().getIntArray(R.array.status)[1]);
-                                object.saveInBackground(new SaveCallback() {
+                                object.pinInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
                                     }
                                 });
-                                setResult(Activity.RESULT_OK);
-                                finish();
                              }
                         }
                     });
 
                 }else{
                     ParseQuery<Mission> query = Mission.getQuery();
+                    query.fromLocalDatastore();
                     query.whereEqualTo("objectId",ID);
                     query.getFirstInBackground(new GetCallback<Mission>() {
                         @Override
                         public void done(Mission object, ParseException e) {
                             if (e == null) {
                                 object.setStatus(getResources().getIntArray(R.array.status)[2]);
-                                object.saveInBackground(new SaveCallback() {
+                                object.pinInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
                                     }
                                 });
-                                setResult(Activity.RESULT_OK);
-                                finish();
+
                             }
                         }
                     });
@@ -101,7 +102,7 @@ public class DialogActivity extends Activity {
                     @Override
                     public void done(Mission object, ParseException e) {
                         if (e == null) {
-                            object.deleteInBackground();
+                            object.unpinInBackground();
                             setResult(Activity.RESULT_OK);
                             finish();
                         }

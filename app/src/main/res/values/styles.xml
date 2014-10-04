@@ -160,6 +160,10 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <style name="header" parent="android:Theme.Light">
+        <item name="android:windowTitleSize">@dimen/title_bar_height</item>
+    </style>
+
 
 
 

@@ -28,6 +28,7 @@ public class MListApp extends Application {
     public void onCreate(){
         super.onCreate();
         ParseObject.registerSubclass(Mission.class);
+        Parse.enableLocalDatastore(getApplicationContext());
 
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
         ParseUser.enableAutomaticUser();

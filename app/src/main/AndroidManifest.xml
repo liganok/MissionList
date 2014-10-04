@@ -34,6 +34,7 @@
             android:theme="@style/MyDialogStyle" >
         </activity>
         <activity
+            android:theme="@style/header"
             android:name=".SignInActivity"
             android:label="@string/title_activity_sign_in" >
         </activity>

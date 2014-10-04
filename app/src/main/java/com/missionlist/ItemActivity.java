@@ -66,12 +66,9 @@ public class ItemActivity extends Activity {
                 title.setText(getIntent().getExtras().getString(Mission.TITLE));
             }
             if (getIntent().getExtras().getString(Mission.DESCRIPTION) != null){
-                title.setText(getIntent().getExtras().getString(Mission.DESCRIPTION));
+                description.setText(getIntent().getExtras().getString(Mission.DESCRIPTION));
             }
 
-            if (getIntent().getExtras().getString(Mission.PRIORITY) != null){
-                title.setText(getIntent().getExtras().getString(Mission.PRIORITY));
-            }
             dialog.cancel();
         }
 
@@ -104,19 +101,17 @@ public class ItemActivity extends Activity {
         query.getInBackground(ID,new GetCallback<Mission>() {
             @Override
             public void done(final Mission mission, ParseException e) {
-                if (mission.getTitle().equals(title.getText().toString())){
+                //if (mission.getTitle().equals(title.getText().toString())){
                     mission.setTitle(title.getText().toString());
-                }
-                if (mission.getDescription().equals(description.getText().toString())){
-                    mission.setTitle(description.getText().toString());
-                }
+                //}
+                //if (mission.getDescription().equals(description.getText().toString())){
+                    mission.setDescription(description.getText().toString());
+                //}
                 mission.setDraft(true);
-                if (mission.getOccurrence().equals(occurrence.getText().toString())){
+                /*if (mission.getOccurrence().equals(occurrence.getText().toString())){
                     mission.setTitle(occurrence.getText().toString());
-                }
-                if (mission.getPriority() == Integer.parseInt(priority.getText().toString())){
-                    mission.setPriority(Integer.parseInt(priority.getText().toString()));
-                }
+                }*/
+
                 mission.pinInBackground();
                 if (Util.isNetworkConnected(getApplicationContext())){
                     mission.saveInBackground(new SaveCallback() {
@@ -149,7 +144,7 @@ public class ItemActivity extends Activity {
         mission.setDraft(true);
         mission.setOccurrence(occurrence.getText().toString());
         mission.setStatus(getResources().getIntArray(R.array.status)[0]);
-        mission.setPriority(Integer.parseInt(priority.getText().toString()));
+        //mission.setPriority(Integer.parseInt(priority.getText().toString()));
 
         mission.pinInBackground(new SaveCallback() {
             @Override

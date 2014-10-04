@@ -5,6 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
  * Created by Administrator on 2014/9/13.
  */
 @ParseClassName("Mission")
-public class Mission extends ParseObject {
+public class Mission extends ParseObject implements Serializable {
     public static final String ID = "ID";
     public static final String TITLE = "title";
     public static final String START_DATE = "start_date";
@@ -64,7 +65,7 @@ public class Mission extends ParseObject {
     }
 
     public static ParseQuery<Mission> getQuery() {
-        return ParseQuery.getQuery(Mission.class);
+        return ParseQuery.getQuery(Mission.class).whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
     }
 
 }

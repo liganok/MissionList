@@ -21,10 +21,12 @@ import android.widget.Toast;
 
 import com.missionlist.model.Mission;
 import com.missionlist.util.Util;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,13 +56,13 @@ public class MainActivity extends Activity {
     private static final int ACTIVITY_DIALOG = 2;
 
     final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
-    //final List<Map<String,Object>> doneListItems = new_item ArrayList<Map<String, Object>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        getList(listType);
     }
 
     //Initial view
@@ -73,7 +75,11 @@ public class MainActivity extends Activity {
         list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
         pb_main.setVisibility(View.VISIBLE);
-        new InitListTask().execute(listType);
+        //new InitListTask().execute(listType);
+        simpleAdapter = new SimpleAdapter(this,listItems,
+                R.layout.item_style,
+                new String[]{"pic","title",Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});
+        list.setAdapter(simpleAdapter);
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +125,7 @@ public class MainActivity extends Activity {
                intent.putExtra("ID",listItem.get("ID").toString());
                intent.putExtra("status",listItem.get("status").toString());
                intent.putExtra(Mission.DESCRIPTION,listItem.get(Mission.DESCRIPTION).toString());
-               intent.putExtra(Mission.PRIORITY,listItem.get(Mission.PRIORITY).toString());
+               intent.putExtra(Mission.TITLE,listItem.get(Mission.TITLE).toString());
                startActivityForResult(intent, ACTIVITY_EDIT);
            }
        });
@@ -137,122 +143,37 @@ public class MainActivity extends Activity {
             }
         });
 
-        gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                float x = e2.getX() - e1.getX();
-                float y = e2.getY() - e1.getY();
-
-                if (x > 0) {
-                    prepareSwitch(DONE);
-                } else if (x < 0) {
-                    prepareSwitch(TO_DO);
-                }
-                return true;
-            }
-        });
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void prepareSwitch(int target){
-        pb_main.setVisibility(View.VISIBLE);
+        //pb_main.setVisibility(View.VISIBLE);
         if (target == TO_DO){
             tab_type = TO_DO;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_pressed));
             btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_nomal));
-            new InitListTask().execute(TO_DO);;
+            getList(TO_DO);
         }
         if (target == DONE){
             tab_type = DONE;
             btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_nomal));
             btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_pressed));
-            new InitListTask().execute(DONE);
+            getList(DONE);
         }
-    }
-
-    private void initAdapter(List<Map<String,Object>> listItems){
-        if (simpleAdapter == null){
-            simpleAdapter = new SimpleAdapter(this,listItems,
-                    R.layout.item_style,
-                    new String[]{"pic","title","des"},new int[]{R.id.header,R.id.list_title,R.id.list_des});
-            list.setAdapter(simpleAdapter);
-        }else {
-            simpleAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
-            new InitListTask().execute(listType);
+            getList(listType);
         }
     }
 
-    class InitListTask extends AsyncTask<Integer, Integer, List<Map<String,Object>>> {
-        private List<Map<String,Object>> list;
-
-        protected void onPreExecute(){
-            pb_main.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<Map<String,Object>> doInBackground(Integer... params) {
-            return getList(params[0]);
-        }
-
-        protected void onPostExecute(List<Map<String,Object>> result) {
-            pb_main.setVisibility(View.GONE);
-            initAdapter(result);
-        }
-    }
-
-    private List<Map<String,Object>> getList(Integer listType){
+    private void getList(final int listType){
         listItems.clear();
         ParseQuery<Mission> query = Mission.getQuery();
+        query.fromLocalDatastore();
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
         query.orderByAscending(Mission.TITLE);
         if (listType == DONE){
@@ -260,73 +181,75 @@ public class MainActivity extends Activity {
         }else {
             query.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }
+        query.findInBackground(new FindCallback<Mission>() {
+            @Override
+            public void done(List<Mission> missions, ParseException e) {
+                pb_main.setVisibility(View.INVISIBLE);
+                if (e == null){
+                    if ((missions != null) && !(missions.isEmpty())){
+                        listFeed(listType,missions);
+                    }
+                    Util.showMessage(getApplicationContext(),"Get local data success",Toast.LENGTH_SHORT);
+                }else {
+                    Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
+                }
+            }
+        });
 
         if (Util.isNetworkConnected(getApplicationContext())){
-            try {
-                List<Mission> missions = query.find();
-                ParseObject.pinAllInBackground((List<Mission>)missions);
-                for (final Mission mission1:missions){
-                    //Mission mission1 = missions.get(i);
-                    Map<String,Object> listItem = new HashMap<String, Object>();
-                    listItem.put("ID",mission1.getObjectId());
-                    listItem.put("status",mission1.getStatus());
-                    if (listType == DONE){
-                        listItem.put("pic",R.drawable.ic_done);
-                    }else{
-                        listItem.put("pic",R.drawable.ic_todo);
-                    }
-                    listItem.put("title",mission1.getTitle());
-                    listItem.put("des",mission1.getDescription());
-                    listItems.add(listItem);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            ParseQuery<Mission> queryOnLine = Mission.getQuery();
+            queryOnLine.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
+            queryOnLine.orderByAscending(Mission.TITLE);
+            if (listType == DONE){
+                queryOnLine.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
+            }else {
+                queryOnLine.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
             }
-            try {
-                List<Mission> missions2 = query.find();
-                for (final Mission mission1:missions2){
-                    //Mission mission1 = missions.get(i);
-                    Map<String,Object> listItem = new HashMap<String, Object>();
-                    listItem.put("ID",mission1.getObjectId());
-                    listItem.put("status",mission1.getStatus());
-                    if (listType == DONE){
-                        listItem.put("pic",R.drawable.ic_done);
-                    }else{
-                        listItem.put("pic",R.drawable.ic_todo);
-                    }
-                    listItem.put("title",mission1.getTitle());
-                    listItem.put("des",mission1.getDescription());
-                    listItems.add(listItem);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            queryOnLine.findInBackground(new FindCallback<Mission>() {
+                @Override
+                public void done(List<Mission> missions, ParseException e) {
+                    if ((missions != null) && !(missions.isEmpty())){
+                        listFeed(listType,missions);
+                        ParseObject.pinAllInBackground((List<Mission>)missions, new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null){
+                                    Util.showMessage(getApplicationContext(),"pin all success",Toast.LENGTH_SHORT);
+                                }else {
+                                    Util.showMessage(getApplicationContext(),"pin all failed",Toast.LENGTH_SHORT);
+                                }
+                            }
+                        });
 
-        }else {
-            //Util.showMessage(getApplicationContext(),"Network connection failed", Toast.LENGTH_SHORT);
-            query.fromLocalDatastore();
-            try {
-                List<Mission> missions = query.find();
-                for (final Mission mission1:missions){
-                    //Mission mission1 = missions.get(i);
-                    Map<String,Object> listItem = new HashMap<String, Object>();
-                    listItem.put("ID",mission1.getObjectId());
-                    listItem.put("status",mission1.getStatus());
-                    if (listType == DONE){
-                        listItem.put("pic",R.drawable.ic_done);
-                    }else{
-                        listItem.put("pic",R.drawable.ic_todo);
                     }
-                    listItem.put("title",mission1.getTitle());
-                    listItem.put("des",mission1.getDescription());
-                    listItems.add(listItem);
+                    Util.showMessage(getApplicationContext(),"Get cloud data success",Toast.LENGTH_SHORT);
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            });
         }
 
-        return  listItems;
+    }
+    private void listFeed(int listType,List<Mission> missions){
+        for (Mission mission:missions){
+            Map<String,Object> listItem = new HashMap<String, Object>();
+            if (mission.getObjectId() == null){
+                listItem.put(Mission.ID,mission.get("localId"));
+            }else {
+                listItem.put(Mission.ID,mission.getObjectId());
+            }
+
+            listItem.put(Mission.STATUS,mission.getStatus());
+            if (listType == DONE){
+                listItem.put("pic",R.drawable.ic_done);
+            }else{
+                listItem.put("pic",R.drawable.ic_todo);
+            }
+            listItem.put(Mission.TITLE,mission.getTitle());
+            listItem.put(Mission.DESCRIPTION,mission.getDescription());
+            if (!listItems.contains(listItem)){
+                listItems.add(listItem);
+            }
+        }
+        simpleAdapter.notifyDataSetChanged();
     }
 
 }
