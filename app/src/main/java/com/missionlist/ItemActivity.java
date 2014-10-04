@@ -2,26 +2,19 @@ package com.missionlist;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.missionlist.model.Mission;
 import com.missionlist.util.Util;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ItemActivity extends Activity {
     //private Mission mission;
@@ -43,7 +36,7 @@ public class ItemActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new);
+        setContentView(R.layout.activity_item);
         initView();
     }
 

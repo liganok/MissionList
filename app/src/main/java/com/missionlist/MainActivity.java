@@ -3,13 +3,9 @@ package com.missionlist;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -77,7 +73,7 @@ public class MainActivity extends Activity {
         pb_main.setVisibility(View.VISIBLE);
         //new InitListTask().execute(listType);
         simpleAdapter = new SimpleAdapter(this,listItems,
-                R.layout.item_style,
+                R.layout.style_item_list,
                 new String[]{"pic","title",Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});
         list.setAdapter(simpleAdapter);
         top_head_me.setOnClickListener(new View.OnClickListener() {

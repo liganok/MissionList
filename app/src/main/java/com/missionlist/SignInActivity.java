@@ -3,7 +3,6 @@ package com.missionlist;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +28,7 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_sign_in);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.header_sign_in);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.head_sign_in);
         initView();
     }
 

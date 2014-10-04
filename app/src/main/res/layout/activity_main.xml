@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/activity_bg_color"
     tools:context=".MainActivity">
-    <include layout="@layout/main_head"
+    <include layout="@layout/head_main"
         android:id="@+id/include" />
 
     <ListView
