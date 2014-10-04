@@ -1,6 +1,7 @@
 package com.missionlist;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,9 +21,11 @@ public class DialogActivity extends Activity {
     private TextView tv_dialog_action;
     private RelativeLayout rl_dialog_set_status;
     private RelativeLayout rl_dialog_delete;
+    private Dialog dialog;
 
     private int status;
     private String ID;
+    private String LOCAL_ID;
     private Mission mission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,46 @@ public class DialogActivity extends Activity {
         rl_dialog_delete = (RelativeLayout)findViewById(R.id.rl_dialog_delete);
         status = Integer.parseInt(getIntent().getExtras().getString("status"));
         final int status_done = getResources().getIntArray(R.array.status)[2];
-        ID = getIntent().getExtras().getString("ID");
+
+        if (getIntent().hasExtra(Mission.ID)){
+            ID = getIntent().getExtras().getString(Mission.ID);
+        }
+        if (getIntent().hasExtra(Mission.LOCAL_ID)){
+            LOCAL_ID = getIntent().getExtras().getString(Mission.LOCAL_ID);
+        }
+
+        if (ID != null){
+            ParseQuery<Mission> query = Mission.getQuery();
+            query.fromLocalDatastore();
+            query.whereEqualTo(Mission.ID,ID);
+            query.getFirstInBackground(new GetCallback<Mission>() {
+                @Override
+                public void done(Mission o, ParseException e) {
+                    if (e==null){
+                        mission = o;
+                        dialog.cancel();
+                    }
+                }
+            });
+
+        }else {
+            if (LOCAL_ID != null){
+                dialog.show();
+                ParseQuery<Mission> query = Mission.getQuery();
+                query.fromLocalDatastore();
+                query.whereEqualTo(Mission.LOCAL_ID,LOCAL_ID);
+                query.getFirstInBackground(new GetCallback<Mission>() {
+                    @Override
+                    public void done(Mission o, ParseException e) {
+                        if (e==null){
+                            dialog.cancel();
+                        }
+                    }
+                });
+
+            }
+        }
+
         if (status == status_done){
             tv_dialog_action.setText("Reset to in process");
         }else{

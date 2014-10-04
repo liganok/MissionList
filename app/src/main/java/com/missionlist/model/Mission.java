@@ -15,53 +15,55 @@ import java.util.UUID;
 @ParseClassName("Mission")
 public class Mission extends ParseObject implements Serializable {
     public static final String ID = "ID";
-    public static final String TITLE = "title";
-    public static final String START_DATE = "start_date";
-    public static final String DUE_DATE = "due_date";
-    public static final String CATEGORY = "category";
-    public static final String PRIORITY = "priority";
-    public static final String DESCRIPTION = "description";
-    public static final String IS_DRAFT = "isDraft";
-    public static final String STATUS = "status";
-    public static final String OCCURRENCE = "occurrence";
-    public static final String AUTHOR = "author";
+    public static final String TITLE = "TITLE";
+    public static final String START_DATE = "START_DATE";
+    public static final String DUE_DATE = "DUE_DATE";
+    public static final String CATEGORY = "CATEGORY";
+    public static final String PRIORITY = "PRIORITY";
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String IS_DRAFT = "IS_DRAFT";
+    public static final String STATUS = "STATUS";
+    public static final String OCCURRENCE = "OCCURRENCE";
+    public static final String AUTHOR = "AUTHOR";
+    public static final String LOCAL_ID = "LOCAL_ID";
 
-    public String getTitle(){return getString("title");}
-    public void  setTitle(String title) {if(title != null){put("title",title);}}
 
-    public Date getStartDate(){return getDate("start_date");}
-    public void setStartDate(Date start_date){if (start_date != null){put("start_date",start_date);}}
+    public String getTitle(){return getString(Mission.TITLE);}
+    public void  setTitle(String title) {if(title != null){put(Mission.TITLE,title);}}
 
-    public Date getDueDate(){return getDate("due_date");}
-    public void setDueDate(Date due_date){if (due_date != null){put("start_time",due_date);}}
+    public Date getStartDate(){return getDate(Mission.START_DATE);}
+    public void setStartDate(Date start_date){if (start_date != null){put(Mission.START_DATE,start_date);}}
 
-    public String getCategory(){return getString("category");}
-    public void  setCategory(String category) {if(category != null){put("category",category);}}
+    public Date getDueDate(){return getDate(Mission.DUE_DATE);}
+    public void setDueDate(Date due_date){if (due_date != null){put(Mission.DUE_DATE,due_date);}}
 
-    public int getPriority(){return getInt("priority");}
-    public void  setPriority(int priority) {put("priority",priority);}
+    public String getCategory(){return getString(Mission.CATEGORY);}
+    public void  setCategory(String category) {if(category != null){put(Mission.CATEGORY,category);}}
 
-    public String getOccurrence(){return getString("occurrence");}
-    public void  setOccurrence(String occurrence) {if (occurrence != null){put("occurrence",occurrence);}}
+    public int getPriority(){return getInt(Mission.PRIORITY);}
+    public void  setPriority(int priority) {put(Mission.PRIORITY,priority);}
 
-    public String getDescription(){return getString("description");}
-    public void  setDescription(String description) {if (description != null){put("description",description);}}
+    public String getOccurrence(){return getString(Mission.OCCURRENCE);}
+    public void  setOccurrence(String occurrence) {if (occurrence != null){put(Mission.OCCURRENCE,occurrence);}}
 
-    public int getStatus(){return getInt("status");}
-    public void  setStatus(int status) {put("status",status);}
+    public String getDescription(){return getString(Mission.DESCRIPTION);}
+    public void  setDescription(String description) {if (description != null){put(Mission.DESCRIPTION,description);}}
 
-    public boolean getDraft(){return getBoolean("isDraft");}
-    public void  setDraft(boolean isDraft) {put("isDraft",isDraft);}
+    public int getStatus(){return getInt(Mission.STATUS);}
+    public void  setStatus(int status) {put(Mission.STATUS,status);}
 
-    public ParseUser getAuthor() {return getParseUser("author"); }
-    public void setAuthor(ParseUser currentUser) {if (currentUser != null){put("author", currentUser);}}
+    public boolean getDraft(){return getBoolean(Mission.IS_DRAFT);}
+    public void  setDraft(boolean isDraft) {put(Mission.IS_DRAFT,isDraft);}
 
-    public void setUuidString() {
+    public ParseUser getAuthor() {return getParseUser(Mission.AUTHOR); }
+    public void setAuthor(ParseUser currentUser) {if (currentUser != null){put(Mission.AUTHOR, currentUser);}}
+
+    public void setLocalId() {
         UUID uuid = UUID.randomUUID();
-        put("uuid", uuid.toString());
+        put(Mission.LOCAL_ID, uuid.toString());
     }
-    public String getUuidString() {
-        return getString("uuid");
+    public String getLocalId() {
+        return getString(Mission.LOCAL_ID);
     }
 
     public static ParseQuery<Mission> getQuery() {

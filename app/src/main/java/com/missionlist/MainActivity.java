@@ -74,14 +74,11 @@ public class MainActivity extends Activity {
         //new InitListTask().execute(listType);
         simpleAdapter = new SimpleAdapter(this,listItems,
                 R.layout.style_item_list,
-                new String[]{"pic","title",Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});
+                new String[]{"pic",Mission.TITLE,Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});
         list.setAdapter(simpleAdapter);
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast=Toast.makeText(getApplicationContext(), "me", Toast.LENGTH_SHORT);
-                //toast.show();
-                //Intent intent = new Intent(MainActivity.this,MeActivity.class);
                 Intent intent = new Intent(MainActivity.this,MeActivity.class);
                 startActivity(intent);
             }
@@ -90,8 +87,6 @@ public class MainActivity extends Activity {
         top_head_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast=Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT);
-                //toast.show();
                 Intent intent = new Intent(MainActivity.this,ItemActivity.class);
                 startActivityForResult(intent, ACTIVITY_CREATE);
             }
@@ -118,10 +113,14 @@ public class MainActivity extends Activity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Intent intent = new Intent(MainActivity.this,ItemActivity.class);
                Map<String,Object> listItem = listItems.get(position);
-               intent.putExtra("ID",listItem.get("ID").toString());
-               intent.putExtra("status",listItem.get("status").toString());
-               intent.putExtra(Mission.DESCRIPTION,listItem.get(Mission.DESCRIPTION).toString());
-               intent.putExtra(Mission.TITLE,listItem.get(Mission.TITLE).toString());
+
+               if (listItem.get(Mission.ID) != null){
+                   intent.putExtra(Mission.ID,listItem.get(Mission.ID).toString());
+               }
+               if (listItem.get(Mission.LOCAL_ID) != null){
+                   intent.putExtra(Mission.LOCAL_ID,listItem.get(Mission.LOCAL_ID).toString());
+               }
+
                startActivityForResult(intent, ACTIVITY_EDIT);
            }
        });
@@ -131,9 +130,12 @@ public class MainActivity extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, DialogActivity.class);
                 Map<String,Object> listItem = listItems.get(position);
-                intent.putExtra("ID",listItem.get("ID").toString());
-                intent.putExtra("title",listItem.get("title").toString());
-                intent.putExtra("status",listItem.get("status").toString());
+                if (listItem.get(Mission.ID) != null){
+                    intent.putExtra(Mission.ID,listItem.get(Mission.ID).toString());
+                }
+                if (listItem.get(Mission.LOCAL_ID) != null){
+                    intent.putExtra(Mission.LOCAL_ID,listItem.get(Mission.LOCAL_ID).toString());
+                }
                 startActivityForResult(intent,ACTIVITY_DIALOG);
                 return true;
             }
@@ -189,10 +191,11 @@ public class MainActivity extends Activity {
                 }else {
                     Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
                 }
+                simpleAdapter.notifyDataSetChanged();
             }
         });
 
-        if (Util.isNetworkConnected(getApplicationContext())){
+        /*if (Util.isNetworkConnected(getApplicationContext())){
             ParseQuery<Mission> queryOnLine = Mission.getQuery();
             queryOnLine.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
             queryOnLine.orderByAscending(Mission.TITLE);
@@ -221,18 +224,15 @@ public class MainActivity extends Activity {
                     Util.showMessage(getApplicationContext(),"Get cloud data success",Toast.LENGTH_SHORT);
                 }
             });
-        }
+        }*/
 
     }
     private void listFeed(int listType,List<Mission> missions){
+        listItems.clear();
         for (Mission mission:missions){
             Map<String,Object> listItem = new HashMap<String, Object>();
-            if (mission.getObjectId() == null){
-                listItem.put(Mission.ID,mission.get("localId"));
-            }else {
-                listItem.put(Mission.ID,mission.getObjectId());
-            }
-
+            listItem.put(Mission.ID,mission.getObjectId());
+            listItem.put(Mission.LOCAL_ID,mission.getLocalId());
             listItem.put(Mission.STATUS,mission.getStatus());
             if (listType == DONE){
                 listItem.put("pic",R.drawable.ic_done);

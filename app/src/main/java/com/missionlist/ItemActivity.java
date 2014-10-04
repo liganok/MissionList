@@ -18,7 +18,8 @@ import com.parse.SaveCallback;
 
 public class ItemActivity extends Activity {
     //private Mission mission;
-    private String ID = null;
+    private String ID ;
+    private String LOCAL_ID ;
     private EditText title;
     private EditText start_date;
     private EditText due_date;
@@ -29,6 +30,7 @@ public class ItemActivity extends Activity {
     private FrameLayout save;
     private FrameLayout close;
     private Dialog dialog;
+    private Mission mission;
 
     private static final int MISSION_DETAIL = 3;
     private static final int MISSION_CREATE = 4;
@@ -53,28 +55,73 @@ public class ItemActivity extends Activity {
 
         //Initial the detail list if needed
         if (getIntent().hasExtra(Mission.ID)){
-            dialog.show();
             ID = getIntent().getExtras().getString(Mission.ID);
-            if (getIntent().getExtras().getString(Mission.TITLE) != null){
-                title.setText(getIntent().getExtras().getString(Mission.TITLE));
-            }
-            if (getIntent().getExtras().getString(Mission.DESCRIPTION) != null){
-                description.setText(getIntent().getExtras().getString(Mission.DESCRIPTION));
-            }
+        }
+        if (getIntent().hasExtra(Mission.LOCAL_ID)){
+            LOCAL_ID = getIntent().getExtras().getString(Mission.LOCAL_ID);
+        }
 
-            dialog.cancel();
+        if (ID != null){
+            dialog.show();
+            ParseQuery<Mission> query = Mission.getQuery();
+            query.fromLocalDatastore();
+            query.whereEqualTo(Mission.ID,ID);
+            query.getFirstInBackground(new GetCallback<Mission>() {
+                @Override
+                public void done(Mission o, ParseException e) {
+                    if (e==null){
+                        mission = o;
+                        title.setText(mission.getTitle());
+                        description.setText(mission.getDescription());
+                        dialog.cancel();
+                    }
+                }
+            });
+
+        }else {
+            if (LOCAL_ID != null){
+                dialog.show();
+                ParseQuery<Mission> query = Mission.getQuery();
+                query.fromLocalDatastore();
+                query.whereEqualTo(Mission.LOCAL_ID,LOCAL_ID);
+                query.getFirstInBackground(new GetCallback<Mission>() {
+                    @Override
+                    public void done(Mission o, ParseException e) {
+                        if (e==null){
+                            mission = o;
+                            title.setText(mission.getTitle());
+                            description.setText(mission.getDescription());
+                            dialog.cancel();
+                        }
+                    }
+                });
+
+            }else {
+                mission = new Mission();
+                mission.setLocalId();
+            }
         }
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getIntent().hasExtra(Mission.ID)){
-                    ID = getIntent().getExtras().getString(Mission.ID);
-                    saveItemEdit(ID);
-                }else{
-                    //new processDataTask().execute(MListApp.REQ_ITEM_NEW);
-                    saveItemNew();
-                }
+                dialog.show();
+                mission.setTitle(title.getText().toString());
+                mission.setDescription(description.getText().toString());
+                mission.setAuthor(ParseUser.getCurrentUser());
+                mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        dialog.cancel();
+                        if (e==null){
+                            setResult(Activity.RESULT_OK);
+                            Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
+                            finish();
+                        }else {
+                            Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
             }
         });
 
