@@ -8,8 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.missionlist.model.Mission;
+import com.missionlist.util.Util;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,11 +39,9 @@ public class DialogActivity extends Activity {
 
     private void initView(){
         tv_dialog_title = (TextView)findViewById(R.id.tv_dialog_title);
-        tv_dialog_title.setText(getIntent().getExtras().getString("title"));
         tv_dialog_action = (TextView)findViewById(R.id.tv_dialog_action);
         rl_dialog_set_status = (RelativeLayout)findViewById(R.id.rl_dialog_set_status);
         rl_dialog_delete = (RelativeLayout)findViewById(R.id.rl_dialog_delete);
-        status = Integer.parseInt(getIntent().getExtras().getString("status"));
         final int status_done = getResources().getIntArray(R.array.status)[2];
 
         if (getIntent().hasExtra(Mission.ID)){
@@ -53,82 +54,60 @@ public class DialogActivity extends Activity {
         if (ID != null){
             ParseQuery<Mission> query = Mission.getQuery();
             query.fromLocalDatastore();
-            query.whereEqualTo(Mission.ID,ID);
-            query.getFirstInBackground(new GetCallback<Mission>() {
-                @Override
-                public void done(Mission o, ParseException e) {
-                    if (e==null){
-                        mission = o;
-                        dialog.cancel();
-                    }
+            query.whereEqualTo(Mission.ID, ID);
+            try {
+                mission = query.getFirst();
+                tv_dialog_title.setText(mission.getTitle());
+                if (mission.getStatus() == status_done){
+                    tv_dialog_action.setText("Reset to in process");
+                }else{
+                    tv_dialog_action.setText("Set to done");
                 }
-            });
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         }else {
             if (LOCAL_ID != null){
-                dialog.show();
                 ParseQuery<Mission> query = Mission.getQuery();
                 query.fromLocalDatastore();
-                query.whereEqualTo(Mission.LOCAL_ID,LOCAL_ID);
-                query.getFirstInBackground(new GetCallback<Mission>() {
-                    @Override
-                    public void done(Mission o, ParseException e) {
-                        if (e==null){
-                            dialog.cancel();
-                        }
+                query.whereEqualTo(Mission.LOCAL_ID, LOCAL_ID);
+                try {
+                    mission = query.getFirst();
+                    tv_dialog_title.setText(mission.getTitle());
+                    if (mission.getStatus() == status_done){
+                        tv_dialog_action.setText("Reset to in process");
+                    }else{
+                        tv_dialog_action.setText("Set to done");
                     }
-                });
-
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-
-        if (status == status_done){
-            tv_dialog_action.setText("Reset to in process");
-        }else{
-            tv_dialog_action.setText("Set to done");
         }
 
         rl_dialog_set_status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status == status_done){
-                    ParseQuery<Mission> query = Mission.getQuery();
-                    query.fromLocalDatastore();
-                    query.whereEqualTo("objectId",ID);
-                    query.getFirstInBackground(new GetCallback<Mission>() {
+                if (mission.getStatus() == status_done){
+                    mission.setStatus(getResources().getIntArray(R.array.status)[1]);
+                    mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
                         @Override
-                        public void done(Mission object, ParseException e) {
-                            if (e == null) {
-                                object.setStatus(getResources().getIntArray(R.array.status)[1]);
-                                object.pinInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                    }
-                                });
-                             }
+                        public void done(ParseException e) {
+                            setResult(Activity.RESULT_OK);
+                            Util.showMessage(getApplicationContext(), "Save in local success", Toast.LENGTH_SHORT);
+                            finish();
                         }
                     });
 
                 }else{
-                    ParseQuery<Mission> query = Mission.getQuery();
-                    query.fromLocalDatastore();
-                    query.whereEqualTo("objectId",ID);
-                    query.getFirstInBackground(new GetCallback<Mission>() {
+                    mission.setStatus(getResources().getIntArray(R.array.status)[2]);
+                    mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
                         @Override
-                        public void done(Mission object, ParseException e) {
-                            if (e == null) {
-                                object.setStatus(getResources().getIntArray(R.array.status)[2]);
-                                object.pinInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                    }
-                                });
-
-                            }
+                        public void done(ParseException e) {
+                            setResult(Activity.RESULT_OK);
+                            Util.showMessage(getApplicationContext(), "Save in local success", Toast.LENGTH_SHORT);
+                            finish();
                         }
                     });
                 }
@@ -138,18 +117,34 @@ public class DialogActivity extends Activity {
         rl_dialog_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseQuery<Mission> query = Mission.getQuery();
-                query.whereEqualTo("objectId",ID);
-                query.getFirstInBackground(new GetCallback<Mission>() {
-                    @Override
-                    public void done(Mission object, ParseException e) {
-                        if (e == null) {
-                            object.unpinInBackground();
-                            setResult(Activity.RESULT_OK);
-                            finish();
+                if (ID != "x"){
+                    mission.deleteEventually(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e==null){
+                                setResult(Activity.RESULT_OK);
+                                Util.showMessage(getApplicationContext(), "Delete in success", Toast.LENGTH_SHORT);
+                                finish();
+                            }else{
+                                e.printStackTrace();
+                                Util.showMessage(getApplicationContext(), "Delete in failed", Toast.LENGTH_SHORT);
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    mission.unpinInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e==null){
+                                setResult(Activity.RESULT_OK);
+                                Util.showMessage(getApplicationContext(), "Delete in local success", Toast.LENGTH_SHORT);
+                                finish();
+                            }else{
+                                Util.showMessage(getApplicationContext(), "Delete in local failed", Toast.LENGTH_SHORT);
+                            }
+                        }
+                    });
+                }
             }
         });
 

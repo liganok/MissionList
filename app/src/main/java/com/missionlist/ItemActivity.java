@@ -108,6 +108,7 @@ public class ItemActivity extends Activity {
                 dialog.show();
                 mission.setTitle(title.getText().toString());
                 mission.setDescription(description.getText().toString());
+                mission.setDraft(true);
                 mission.setAuthor(ParseUser.getCurrentUser());
                 mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
                     @Override
