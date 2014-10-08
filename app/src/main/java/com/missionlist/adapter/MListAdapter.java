@@ -48,7 +48,13 @@ public class MListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder mHolder;
+        View view = convertView;
         return null;
+    }
+
+    static class ViewHolder{
+
     }
 
 
