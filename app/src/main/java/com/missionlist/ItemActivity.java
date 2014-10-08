@@ -53,7 +53,7 @@ public class ItemActivity extends Activity {
         close = (FrameLayout)findViewById(R.id.fl_head_close);
         dialog = Util.createLoadingDialog(ItemActivity.this);
 
-        //Initial the detail list if needed
+
         if (getIntent().hasExtra(Mission.ID)){
             ID = getIntent().getExtras().getString(Mission.ID);
         }
@@ -62,7 +62,7 @@ public class ItemActivity extends Activity {
         }
 
         if (ID != null){
-            dialog.show();
+            //dialog.show();
             ParseQuery<Mission> query = Mission.getQuery();
             query.fromLocalDatastore();
             query.whereEqualTo(Mission.ID,ID);
@@ -80,7 +80,7 @@ public class ItemActivity extends Activity {
 
         }else {
             if (LOCAL_ID != null){
-                dialog.show();
+                //dialog.show();
                 ParseQuery<Mission> query = Mission.getQuery();
                 query.fromLocalDatastore();
                 query.whereEqualTo(Mission.LOCAL_ID,LOCAL_ID);
@@ -110,7 +110,7 @@ public class ItemActivity extends Activity {
                 mission.setDescription(description.getText().toString());
                 mission.setDraft(true);
                 mission.setAuthor(ParseUser.getCurrentUser());
-                mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
+                mission.saveEventually(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         dialog.cancel();
@@ -123,6 +123,19 @@ public class ItemActivity extends Activity {
                         }
                     }
                 });
+                /*mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        dialog.cancel();
+                        if (e==null){
+                            setResult(Activity.RESULT_OK);
+                            Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
+                            finish();
+                        }else {
+                            Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });*/
             }
         });
 
@@ -135,89 +148,5 @@ public class ItemActivity extends Activity {
 
     }
 
-    private void saveItemEdit(String ID){
-        dialog.show();
-        ParseQuery<Mission> query = Mission.getQuery();
-        query.fromLocalDatastore();
-        query.getInBackground(ID,new GetCallback<Mission>() {
-            @Override
-            public void done(final Mission mission, ParseException e) {
-                //if (mission.getTitle().equals(title.getText().toString())){
-                    mission.setTitle(title.getText().toString());
-                //}
-                //if (mission.getDescription().equals(description.getText().toString())){
-                    mission.setDescription(description.getText().toString());
-                //}
-                mission.setDraft(true);
-                /*if (mission.getOccurrence().equals(occurrence.getText().toString())){
-                    mission.setTitle(occurrence.getText().toString());
-                }*/
-
-                mission.pinInBackground();
-                if (Util.isNetworkConnected(getApplicationContext())){
-                    mission.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null){
-                                mission.setDraft(false);
-                                mission.pinInBackground();
-                                Util.showMessage(getApplicationContext(),"Save in cloud success", Toast.LENGTH_SHORT);
-                            }else{
-                                Util.showMessage(getApplicationContext(),"Save in cloud failed", Toast.LENGTH_SHORT);
-                            }
-                        }
-                    });
-                }
-                setResult(Activity.RESULT_OK);
-                dialog.cancel();
-                finish();
-            }
-        });
-
-    }
-
-    private void saveItemNew(){
-        dialog.show();
-        final Mission mission = new Mission();
-        mission.setTitle(title.getText().toString());
-        mission.setAuthor(ParseUser.getCurrentUser());
-        mission.setDescription(description.getText().toString());
-        mission.setDraft(true);
-        mission.setOccurrence(occurrence.getText().toString());
-        mission.setStatus(getResources().getIntArray(R.array.status)[0]);
-        //mission.setPriority(Integer.parseInt(priority.getText().toString()));
-
-        mission.pinInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null){
-                    Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
-                    setResult(Activity.RESULT_OK);
-
-                    if (Util.isNetworkConnected(getApplicationContext())){
-                        mission.setDraft(true);
-                        mission.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null){
-                                    mission.setDraft(false);
-                                    mission.pinInBackground();
-                                    Util.showMessage(getApplicationContext(),"Save in cloud success", Toast.LENGTH_SHORT);
-                                }else {
-                                    Util.showMessage(getApplicationContext(),"Save in cloud failed", Toast.LENGTH_SHORT);
-                                }
-                            }
-                        });
-                    }
-                    setResult(Activity.RESULT_OK);
-                    dialog.cancel();
-                    finish();
-                }else {
-                    Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-
-    }
 
 }

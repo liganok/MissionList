@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.missionlist.adapter.MListAdapter;
 import com.missionlist.model.Mission;
 import com.missionlist.util.Util;
 import com.parse.FindCallback;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity {
     private RelativeLayout pb_main;
     private int tab_type;
     private SimpleAdapter simpleAdapter;
+    private MListAdapter mListAdapter;
     private ListView list;
     private final static int TO_DO = 1;
     private final static int DONE = 2;
@@ -52,6 +54,7 @@ public class MainActivity extends Activity {
     private static final int ACTIVITY_DIALOG = 2;
 
     final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
+    private List<Mission> mList = new ArrayList<Mission>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +75,12 @@ public class MainActivity extends Activity {
         tab_type = TO_DO;
         pb_main.setVisibility(View.VISIBLE);
         //new InitListTask().execute(listType);
-        simpleAdapter = new SimpleAdapter(this,listItems,
+        /*simpleAdapter = new SimpleAdapter(this,listItems,
                 R.layout.style_item_list,
-                new String[]{"pic",Mission.TITLE,Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});
-        list.setAdapter(simpleAdapter);
+                new String[]{"pic",Mission.TITLE,Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});*/
+        //list.setAdapter(simpleAdapter);
+        mListAdapter = new MListAdapter(this,mList);
+        list.setAdapter(mListAdapter);
         top_head_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,13 +117,14 @@ public class MainActivity extends Activity {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Intent intent = new Intent(MainActivity.this,ItemActivity.class);
-               Map<String,Object> listItem = listItems.get(position);
+               Mission mission = mList.get(position);
 
-               if (listItem.get(Mission.ID) != null){
-                   intent.putExtra(Mission.ID,listItem.get(Mission.ID).toString());
-               }
-               if (listItem.get(Mission.LOCAL_ID) != null){
-                   intent.putExtra(Mission.LOCAL_ID,listItem.get(Mission.LOCAL_ID).toString());
+               if (mission.getObjectId() != null){
+                   intent.putExtra(Mission.ID,mission.getObjectId());
+               }else{
+                   if (mission.getLocalId() != null){
+                       intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                   }
                }
 
                startActivityForResult(intent, ACTIVITY_EDIT);
@@ -169,7 +175,6 @@ public class MainActivity extends Activity {
     }
 
     private void getList(final int listType){
-        listItems.clear();
         ParseQuery<Mission> query = Mission.getQuery();
         query.fromLocalDatastore();
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
@@ -185,49 +190,20 @@ public class MainActivity extends Activity {
                 pb_main.setVisibility(View.INVISIBLE);
                 if (e == null){
                     if ((missions != null) && !(missions.isEmpty())){
-                        listFeed(listType,missions);
+                        mList.clear();
+                        mList.addAll(missions);
+                        mListAdapter.notifyDataSetChanged();
                     }
                     Util.showMessage(getApplicationContext(),"Get local data success",Toast.LENGTH_SHORT);
                 }else {
                     Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
                 }
-                simpleAdapter.notifyDataSetChanged();
             }
         });
 
-        /*if (Util.isNetworkConnected(getApplicationContext())){
-            ParseQuery<Mission> queryOnLine = Mission.getQuery();
-            queryOnLine.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
-            queryOnLine.orderByAscending(Mission.TITLE);
-            if (listType == DONE){
-                queryOnLine.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
-            }else {
-                queryOnLine.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
-            }
-            queryOnLine.findInBackground(new FindCallback<Mission>() {
-                @Override
-                public void done(List<Mission> missions, ParseException e) {
-                    if ((missions != null) && !(missions.isEmpty())){
-                        listFeed(listType,missions);
-                        ParseObject.pinAllInBackground((List<Mission>)missions, new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null){
-                                    Util.showMessage(getApplicationContext(),"pin all success",Toast.LENGTH_SHORT);
-                                }else {
-                                    Util.showMessage(getApplicationContext(),"pin all failed",Toast.LENGTH_SHORT);
-                                }
-                            }
-                        });
-
-                    }
-                    Util.showMessage(getApplicationContext(),"Get cloud data success",Toast.LENGTH_SHORT);
-                }
-            });
-        }*/
 
     }
-    private void listFeed(int listType,List<Mission> missions){
+    /*private void listFeed(int listType,List<Mission> missions){
         listItems.clear();
         for (Mission mission:missions){
             Map<String,Object> listItem = new HashMap<String, Object>();
@@ -246,6 +222,6 @@ public class MainActivity extends Activity {
             }
         }
         simpleAdapter.notifyDataSetChanged();
-    }
+    }*/
 
 }
