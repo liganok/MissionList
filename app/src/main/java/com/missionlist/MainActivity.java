@@ -203,25 +203,5 @@ public class MainActivity extends Activity {
 
 
     }
-    /*private void listFeed(int listType,List<Mission> missions){
-        listItems.clear();
-        for (Mission mission:missions){
-            Map<String,Object> listItem = new HashMap<String, Object>();
-            listItem.put(Mission.ID,mission.getObjectId());
-            listItem.put(Mission.LOCAL_ID,mission.getLocalId());
-            listItem.put(Mission.STATUS,mission.getStatus());
-            if (listType == DONE){
-                listItem.put("pic",R.drawable.ic_done);
-            }else{
-                listItem.put("pic",R.drawable.ic_todo);
-            }
-            listItem.put(Mission.TITLE,mission.getTitle());
-            listItem.put(Mission.DESCRIPTION,mission.getDescription());
-            if (!listItems.contains(listItem)){
-                listItems.add(listItem);
-            }
-        }
-        simpleAdapter.notifyDataSetChanged();
-    }*/
 
 }
