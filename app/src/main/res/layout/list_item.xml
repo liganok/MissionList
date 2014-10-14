@@ -2,35 +2,78 @@
     android:orientation="horizontal"
     android:id="@+id/item_list"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_height">
+    android:layout_height="@dimen/list_height"
+    android:minHeight="@dimen/list_height"
+    android:showDividers="middle">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:paddingLeft="5dip" >
-        <ImageView
-            android:id="@+id/item_image"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center_vertical"/>
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/item_rl_title">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="5dip" >
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="5dip" >
+            <ImageView
+                android:id="@+id/item_sync_flag"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/item_rl_title"
         android:layout_gravity="center_vertical">
         <TextView
             style="@style/tv_list_title"
             android:id="@+id/item_title"
+            android:text="Title"
+            android:padding="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="7dp"
+            android:text="晚上"
+            android:textSize="12sp"
+            android:textColor="#ffacacac" />
+        <TextView
             style="@style/tv_list_des"
             android:id="@+id/item_des"
+            android:text="Description"
+            android:padding="7dp"
+            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textColor="#ff7a7a7a" />
+        <TextView
+            android:id="@+id/item_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="7dp"
+            android:text="High"
+            android:textSize="12sp"
+            android:textColor="#ffacacac" />
+    </RelativeLayout>
 </LinearLayout>
 
 

@@ -22,6 +22,7 @@ public class Mission extends ParseObject implements Serializable {
     public static final String PRIORITY = "PRIORITY";
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final String IS_DRAFT = "IS_DRAFT";
+    public static final String IS_DELETE = "IS_DELETE";
     public static final String STATUS = "STATUS";
     public static final String OCCURRENCE = "OCCURRENCE";
     public static final String AUTHOR = "AUTHOR";
@@ -54,6 +55,9 @@ public class Mission extends ParseObject implements Serializable {
 
     public boolean getDraft(){return getBoolean(Mission.IS_DRAFT);}
     public void  setDraft(boolean isDraft) {put(Mission.IS_DRAFT,isDraft);}
+
+    public boolean getDelete(){return getBoolean(Mission.IS_DELETE);}
+    public void  setDelete(boolean isDelete) {put(Mission.IS_DELETE,isDelete);}
 
     public ParseUser getAuthor() {return getParseUser(Mission.AUTHOR); }
     public void setAuthor(ParseUser currentUser) {if (currentUser != null){put(Mission.AUTHOR, currentUser);}}

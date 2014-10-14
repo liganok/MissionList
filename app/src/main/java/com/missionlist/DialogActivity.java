@@ -54,9 +54,8 @@ public class DialogActivity extends Activity {
         if (ID != null){
             ParseQuery<Mission> query = Mission.getQuery();
             query.fromLocalDatastore();
-            query.whereEqualTo(Mission.ID, ID);
             try {
-                mission = query.getFirst();
+                mission = query.get(ID);
                 tv_dialog_title.setText(mission.getTitle());
                 if (mission.getStatus() == status_done){
                     tv_dialog_action.setText("Reset to in process");
@@ -117,7 +116,21 @@ public class DialogActivity extends Activity {
         rl_dialog_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ID != "x"){
+                mission.setDelete(true);
+                mission.pinInBackground(MListApp.GROUP_DELETE,new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e==null){
+                            setResult(Activity.RESULT_OK);
+                            Util.showMessage(getApplicationContext(), "Delete in success", Toast.LENGTH_SHORT);
+                            finish();
+                        }else{
+                            e.printStackTrace();
+                            Util.showMessage(getApplicationContext(), "Delete in failed", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+                /*if (ID != "x"){
                     mission.deleteEventually(new DeleteCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -144,7 +157,7 @@ public class DialogActivity extends Activity {
                             }
                         }
                     });
-                }
+                }*/
             }
         });
 

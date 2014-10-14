@@ -57,8 +57,10 @@ public class MListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.list_item,null);
             mHolder = new ViewHolder();
             mHolder.itemImage = (ImageView)view.findViewById(R.id.item_image);
+            mHolder.itemSyncFlag = (ImageView)view.findViewById(R.id.item_sync_flag);
             mHolder.itemTitle = (TextView)view.findViewById(R.id.item_title);
             mHolder.itemDescription = (TextView)view.findViewById(R.id.item_des);
+            mHolder.itemPriority = (TextView)view.findViewById(R.id.item_priority);
             view.setTag(mHolder);
         }else {
             mHolder = (ViewHolder)view.getTag();
@@ -73,6 +75,22 @@ public class MListAdapter extends BaseAdapter {
             }else {
                 mHolder.itemImage.setImageResource(R.drawable.ic_todo);
             }
+            if(mission.getDraft() == true){
+                mHolder.itemSyncFlag.setImageResource(R.drawable.ic_sync_flag);
+            }
+            switch (mission.getPriority()){
+                case -1:
+                    mHolder.itemPriority.setText("Low");
+                    break;
+                case 0:
+                    mHolder.itemPriority.setText("Medium");
+                    break;
+                case 1:
+                    mHolder.itemPriority.setText("High");
+                    break;
+            }
+
+
         }
 
         return view;
@@ -80,8 +98,10 @@ public class MListAdapter extends BaseAdapter {
 
     static class ViewHolder{
         ImageView itemImage;
+        ImageView itemSyncFlag;
         TextView itemTitle;
         TextView itemDescription;
+        TextView itemPriority;
     }
 
 

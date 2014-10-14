@@ -15,7 +15,10 @@ public class MListApp extends Application {
     private static final String APPLICATION_ID = "zNx5pC3cWCUVI3vvPeCEXK6EJuhpe3E4GXvK3Dvt";
     private static final String CLIENT_KEY = "8OucbO7SHfnr31mDcK6BKfga0Z8RWCYUEv0yn4qJ";
     public static final String MISSION = "Mission";
+
+    //Label for parse object
     public static final String GROUP_NAME = "ALL_MISSIONS";
+    public static final String GROUP_DELETE = "DELETE";
 
     public static final String REQ_TYPE =  "REQ_TYPE";
     public static final int REQ_ITEM_DETAIL =  0;

@@ -74,11 +74,6 @@ public class MainActivity extends Activity {
         list = (ListView) findViewById(R.id.task_List);
         tab_type = TO_DO;
         pb_main.setVisibility(View.VISIBLE);
-        //new InitListTask().execute(listType);
-        /*simpleAdapter = new SimpleAdapter(this,listItems,
-                R.layout.style_item_list,
-                new String[]{"pic",Mission.TITLE,Mission.DESCRIPTION},new int[]{R.id.header,R.id.list_title,R.id.list_des});*/
-        //list.setAdapter(simpleAdapter);
         mListAdapter = new MListAdapter(this,mList);
         list.setAdapter(mListAdapter);
         top_head_me.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +121,6 @@ public class MainActivity extends Activity {
                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
                    }
                }
-
                startActivityForResult(intent, ACTIVITY_EDIT);
            }
        });
@@ -135,12 +129,14 @@ public class MainActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, DialogActivity.class);
-                Map<String,Object> listItem = listItems.get(position);
-                if (listItem.get(Mission.ID) != null){
-                    intent.putExtra(Mission.ID,listItem.get(Mission.ID).toString());
-                }
-                if (listItem.get(Mission.LOCAL_ID) != null){
-                    intent.putExtra(Mission.LOCAL_ID,listItem.get(Mission.LOCAL_ID).toString());
+                Mission mission = mList.get(position);
+
+                if (mission.getObjectId() != null){
+                    intent.putExtra(Mission.ID,mission.getObjectId());
+                }else{
+                    if (mission.getLocalId() != null){
+                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                    }
                 }
                 startActivityForResult(intent,ACTIVITY_DIALOG);
                 return true;
@@ -178,6 +174,7 @@ public class MainActivity extends Activity {
         ParseQuery<Mission> query = Mission.getQuery();
         query.fromLocalDatastore();
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
+        query.whereEqualTo(Mission.IS_DELETE,false);
         query.orderByAscending(Mission.TITLE);
         if (listType == DONE){
             query.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
@@ -187,17 +184,17 @@ public class MainActivity extends Activity {
         query.findInBackground(new FindCallback<Mission>() {
             @Override
             public void done(List<Mission> missions, ParseException e) {
+                mList.clear();
                 pb_main.setVisibility(View.INVISIBLE);
                 if (e == null){
                     if ((missions != null) && !(missions.isEmpty())){
-                        mList.clear();
                         mList.addAll(missions);
-                        mListAdapter.notifyDataSetChanged();
                     }
                     Util.showMessage(getApplicationContext(),"Get local data success",Toast.LENGTH_SHORT);
                 }else {
                     Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
                 }
+                mListAdapter.notifyDataSetChanged();
             }
         });
 
