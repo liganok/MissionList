@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.missionlist.R;
 import com.missionlist.model.Mission;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class MListAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private List<Integer> mPositions;
     private List<String> mSections;
+    private SimpleDateFormat formatter    =   new SimpleDateFormat("MM月dd日");
 
     public MListAdapter(Context mContext, List<Mission> mList){
         this.mContext = mContext;
@@ -61,6 +63,7 @@ public class MListAdapter extends BaseAdapter {
             mHolder.itemTitle = (TextView)view.findViewById(R.id.item_title);
             mHolder.itemDescription = (TextView)view.findViewById(R.id.item_des);
             mHolder.itemPriority = (TextView)view.findViewById(R.id.item_priority);
+            mHolder.itemDueDate = (TextView)view.findViewById(R.id.item_due_date);
             view.setTag(mHolder);
         }else {
             mHolder = (ViewHolder)view.getTag();
@@ -90,7 +93,9 @@ public class MListAdapter extends BaseAdapter {
                     break;
             }
 
-
+            if (mission.getDueDate() != null){
+                mHolder.itemDueDate.setText(formatter.format(mission.getDueDate()));
+            }
         }
 
         return view;
@@ -102,6 +107,7 @@ public class MListAdapter extends BaseAdapter {
         TextView itemTitle;
         TextView itemDescription;
         TextView itemPriority;
+        TextView itemDueDate;
     }
 
 

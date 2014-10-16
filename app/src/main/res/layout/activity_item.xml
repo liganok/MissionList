@@ -19,7 +19,6 @@
             >
             <RelativeLayout
                 style="@style/rl_new"
-
                 android:id="@+id/relativeLayout">
                 <TextView
                     style="@style/tv_new"
@@ -69,9 +68,22 @@
                     style="@style/tv_new"
                     android:text = "Priority"
                     android:id="@+id/tv_new_priority" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_new_priority">
+                    <Spinner
+                        style="@style/et_new"
+                        android:layout_gravity="left"
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/spinner_priority">
+                    </Spinner>
+                </LinearLayout>
+
                 <EditText
                     style="@style/et_new"
                     android:id="@+id/et_priority"
+                    android:visibility="gone"
                     android:layout_toRightOf="@+id/tv_new_priority" />
             </RelativeLayout>
 
