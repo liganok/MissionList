@@ -6,7 +6,7 @@
     <entry>
       <key      
         class = "com.android.navigation.ActivityState"      
-        className = "com.missionlist.MainActivity">
+        className = "com.missionlist.fragment.TaskFragment">
         <location        
           id = "point0"        
           x = "0"        

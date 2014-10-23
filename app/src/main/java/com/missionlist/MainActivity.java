@@ -1,204 +1,152 @@
 package com.missionlist;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Menu;
+import android.view.ViewConfiguration;
+import android.view.Window;
 
-import com.missionlist.adapter.MListAdapter;
-import com.missionlist.model.Mission;
-import com.missionlist.util.Util;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.missionlist.astuetz.PagerSlidingTabStrip;
+import com.missionlist.fragment.TaskGroupFragment;
+import com.missionlist.fragment.MeFragment;
+import com.missionlist.fragment.TaskFragment;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
-    //Variable
-    private FrameLayout top_head_me;
-    private FrameLayout top_head_add;
-    private Button btn_to_do;
-    private Button btn_done;
-    //private ProgressBar pb_main;
-    private RelativeLayout pb_main;
-    private int tab_type;
-    private SimpleAdapter simpleAdapter;
-    private MListAdapter mListAdapter;
-    private ListView list;
-    private final static int TO_DO = 1;
-    private final static int DONE = 2;
-    private int listType;
-    private GestureDetector gestureDetector;
+    private MeFragment meFragment;
+    private TaskFragment taskFragment;
+    private TaskGroupFragment taskGroupFragment;
+    private PagerSlidingTabStrip tabs;
 
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
-    private static final int ACTIVITY_DIALOG = 2;
-
-    final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
-    private List<Mission> mList = new ArrayList<Mission>();
+    /**
+     * 获取当前屏幕的密度
+     */
+    private DisplayMetrics dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-        getList(listType);
+        setOverflowShowingAlways();
+        dm = getResources().getDisplayMetrics();
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        tabs.setViewPager(pager);
+        setTabsValue();
     }
 
-    //Initial view
-    private void initView(){
-        top_head_me = (FrameLayout) findViewById(R.id.top_head_me);
-        top_head_add = (FrameLayout) findViewById(R.id.top_head_add);
-        btn_to_do = (Button) findViewById(R.id.btn_todo);
-        btn_done = (Button) findViewById(R.id.btn_done);
-        pb_main = (RelativeLayout)findViewById(R.id.rl_progressBar);
-        list = (ListView) findViewById(R.id.task_List);
-        tab_type = TO_DO;
-        pb_main.setVisibility(View.VISIBLE);
-        mListAdapter = new MListAdapter(this,mList);
-        list.setAdapter(mListAdapter);
-        top_head_me.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,MeActivity.class);
-                startActivity(intent);
-            }
-        });
+    /**
+     * 对PagerSlidingTabStrip的各项属性进行赋值。
+     */
+    private void setTabsValue() {
+        // 设置Tab是自动填充满屏幕的
+        tabs.setShouldExpand(true);
+        // 设置Tab的分割线是透明的
+        tabs.setDividerColor(Color.TRANSPARENT);
+        // 设置Tab底部线的高度
+        tabs.setUnderlineHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 1, dm));
+        // 设置Tab Indicator的高度
+        tabs.setIndicatorHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 4, dm));
+        // 设置Tab标题文字的大小
+        tabs.setTextSize((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, 16, dm));
+        // 设置Tab Indicator的颜色
+        tabs.setIndicatorColor(Color.parseColor("#45c01a"));
+        // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
+        tabs.setSelectedTextColor(Color.parseColor("#45c01a"));
+        // 取消点击Tab时的背景色
+        tabs.setTabBackground(0);
+    }
 
-        top_head_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,ItemActivity.class);
-                startActivityForResult(intent, ACTIVITY_CREATE);
-            }
-        });
+    public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        btn_to_do.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listType = TO_DO;
-                prepareSwitch(listType);
-            }
-        });
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-        btn_done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listType = DONE;
-                prepareSwitch(listType);
-            }
-        });
+        private final String[] titles = { "任务", "任务组", "我" };
 
-       list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Intent intent = new Intent(MainActivity.this,ItemActivity.class);
-               Mission mission = mList.get(position);
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
 
-               if (mission.getObjectId() != null){
-                   intent.putExtra(Mission.ID,mission.getObjectId());
-               }else{
-                   if (mission.getLocalId() != null){
-                       intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
-                   }
-               }
-               startActivityForResult(intent, ACTIVITY_EDIT);
-           }
-       });
+        @Override
+        public int getCount() {
+            return titles.length;
+        }
 
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DialogActivity.class);
-                Mission mission = mList.get(position);
-
-                if (mission.getObjectId() != null){
-                    intent.putExtra(Mission.ID,mission.getObjectId());
-                }else{
-                    if (mission.getLocalId() != null){
-                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    if (taskFragment == null) {
+                        taskFragment = new TaskFragment();
                     }
-                }
-                startActivityForResult(intent,ACTIVITY_DIALOG);
-                return true;
+                    return taskFragment;
+                case 1:
+                    if (taskGroupFragment == null) {
+                        taskGroupFragment = new TaskGroupFragment();
+                    }
+                    return taskGroupFragment;
+                case 2:
+                    if (meFragment == null) {
+                        meFragment = new MeFragment();
+                    }
+                    return meFragment;
+                default:
+                    return null;
             }
-        });
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void prepareSwitch(int target){
-        //pb_main.setVisibility(View.VISIBLE);
-        if (target == TO_DO){
-            tab_type = TO_DO;
-            btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_pressed));
-            btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_nomal));
-            getList(TO_DO);
         }
-        if (target == DONE){
-            tab_type = DONE;
-            btn_to_do.setBackground(getResources().getDrawable(R.drawable.btn_title_todo_nomal));
-            btn_done.setBackground(getResources().getDrawable(R.drawable.btn_title_done_pressed));
-            getList(DONE);
-        }
+
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_OK) {
-            getList(listType);
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
-    private void getList(final int listType){
-        ParseQuery<Mission> query = Mission.getQuery();
-        query.fromLocalDatastore();
-        query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
-        query.whereEqualTo(Mission.IS_DELETE,false);
-        query.orderByAscending(Mission.TITLE);
-        if (listType == DONE){
-            query.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
-        }else {
-            query.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
-        }
-        query.findInBackground(new FindCallback<Mission>() {
-            @Override
-            public void done(List<Mission> missions, ParseException e) {
-                mList.clear();
-                pb_main.setVisibility(View.INVISIBLE);
-                if (e == null){
-                    if ((missions != null) && !(missions.isEmpty())){
-                        mList.addAll(missions);
-                    }
-                    Util.showMessage(getApplicationContext(),"Get local data success",Toast.LENGTH_SHORT);
-                }else {
-                    Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
                 }
-                mListAdapter.notifyDataSetChanged();
             }
-        });
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
 
-
+    private void setOverflowShowingAlways() {
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class
+                    .getDeclaredField("sHasPermanentMenuKey");
+            menuKeyField.setAccessible(true);
+            menuKeyField.setBoolean(config, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

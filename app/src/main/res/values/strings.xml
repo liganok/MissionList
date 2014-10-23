@@ -12,9 +12,9 @@
     <string name="btn_signin">Sign In</string>
     <string name="btn_signup">Sign Up</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
-
     <string name="priority_low">Low</string>
     <string name="priority_medium">Medium</string>
     <string name="priority_high">High</string>
+    <string name="title_activity_my">MyActivity</string>
 
 </resources>
