@@ -2,7 +2,10 @@ package com.missionlist;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -52,6 +55,12 @@ public class ItemActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
         initView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.new_item, menu);
+        return true;
     }
 
     private void initView(){
@@ -140,41 +149,42 @@ public class ItemActivity extends Activity {
 
             }
         });
-        save.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    public void save(){
+        dialog.show();
+        mission.setTitle(title.getText().toString());
+        mission.setDescription(description.getText().toString());
+        mission.setDraft(true);
+        mission.setStartDate(new Date(System.currentTimeMillis()));
+        mission.setDueDate(new Date(System.currentTimeMillis()));
+        mission.setStatus(getResources().getIntArray(R.array.status)[1]);
+        mission.setAuthor(ParseUser.getCurrentUser());
+        mission.setDelete(false);
+        mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
             @Override
-            public void onClick(View v) {
-                dialog.show();
-                mission.setTitle(title.getText().toString());
-                mission.setDescription(description.getText().toString());
-                mission.setDraft(true);
-                mission.setStartDate(new Date(System.currentTimeMillis()));
-                mission.setDueDate(new Date(System.currentTimeMillis()));
-                mission.setStatus(getResources().getIntArray(R.array.status)[1]);
-                mission.setAuthor(ParseUser.getCurrentUser());
-                mission.setDelete(false);
-                mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        dialog.cancel();
-                        if (e==null){
-                            setResult(Activity.RESULT_OK);
-                            Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
-                            finish();
-                        }else {
-                            Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
-                        }
-                    }
-                });
+            public void done(ParseException e) {
+                dialog.cancel();
+                if (e==null){
+                    setResult(Activity.RESULT_OK);
+                    Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
+                    finish();
+                }else {
+                    Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
+                }
             }
         });
+    }
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_save:
+                save();
+                break;
+        }
+        return true;
     }
 
 

@@ -3,6 +3,8 @@ package com.missionlist;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,9 +15,11 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.view.Window;
 
+import com.missionlist.adapter.TabAdapter;
 import com.missionlist.astuetz.PagerSlidingTabStrip;
 import com.missionlist.fragment.TaskGroupFragment;
 import com.missionlist.fragment.MeFragment;
@@ -29,20 +33,25 @@ public class MainActivity extends FragmentActivity {
     private TaskGroupFragment taskGroupFragment;
     private PagerSlidingTabStrip tabs;
 
+    private static final int ACTIVITY_CREATE = 0;
+
     /**
      * 获取当前屏幕的密度
      */
     private DisplayMetrics dm;
+    private TabAdapter tabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setOverflowShowingAlways();
+        //getActionBar().setDisplayShowHomeEnabled(false);
         dm = getResources().getDisplayMetrics();
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        tabAdapter = new TabAdapter(getSupportFragmentManager());
+        pager.setAdapter(tabAdapter);
         tabs.setViewPager(pager);
         setTabsValue();
     }
@@ -72,53 +81,31 @@ public class MainActivity extends FragmentActivity {
         tabs.setTabBackground(0);
     }
 
-    public class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        private final String[] titles = { "任务", "任务组", "我" };
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
-        }
-
-        @Override
-        public int getCount() {
-            return titles.length;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    if (taskFragment == null) {
-                        taskFragment = new TaskFragment();
-                    }
-                    return taskFragment;
-                case 1:
-                    if (taskGroupFragment == null) {
-                        taskGroupFragment = new TaskGroupFragment();
-                    }
-                    return taskGroupFragment;
-                case 2:
-                    if (meFragment == null) {
-                        meFragment = new MeFragment();
-                    }
-                    return meFragment;
-                default:
-                    return null;
-            }
-        }
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_new_task:
+                Intent intent = new Intent(this,ItemActivity.class);
+                startActivityForResult(intent, ACTIVITY_CREATE);
+                break;
+            case R.id.action_new_task_group:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            tabAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

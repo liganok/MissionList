@@ -52,7 +52,6 @@ public class TaskFragment extends Fragment {
     private int listType;
     private GestureDetector gestureDetector;
 
-    private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
     private static final int ACTIVITY_DIALOG = 2;
 
@@ -92,8 +91,6 @@ public class TaskFragment extends Fragment {
 
     //Initial view
     private void initView(){
-        top_head_me = (FrameLayout)view.findViewById(R.id.top_head_me);
-        top_head_add = (FrameLayout) view.findViewById(R.id.top_head_add);
         btn_to_do = (Button) view.findViewById(R.id.btn_todo);
         btn_done = (Button) view.findViewById(R.id.btn_done);
         pb_main = (RelativeLayout)view.findViewById(R.id.rl_progressBar);
@@ -102,21 +99,6 @@ public class TaskFragment extends Fragment {
         pb_main.setVisibility(View.VISIBLE);
         mListAdapter = new MListAdapter(activity,mList);
         list.setAdapter(mListAdapter);
-        top_head_me.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity,MeFragment.class);
-                startActivity(intent);
-            }
-        });
-
-        top_head_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity,ItemActivity.class);
-                startActivityForResult(intent, ACTIVITY_CREATE);
-            }
-        });
 
         btn_to_do.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -28,7 +28,6 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_sign_in);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.head_sign_in);
         initView();
     }
 
