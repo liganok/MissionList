@@ -54,6 +54,8 @@ public class ItemActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_new);
         initView();
     }
 
@@ -182,6 +184,9 @@ public class ItemActivity extends Activity {
         switch (item.getItemId()){
             case R.id.action_save:
                 save();
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
         return true;

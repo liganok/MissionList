@@ -178,7 +178,7 @@ public class TaskFragment extends Fragment {
         }
     }
 
-    private void getList(final int listType){
+    public void getList(final int listType){
         ParseQuery<Mission> query = Mission.getQuery();
         query.fromLocalDatastore();
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
@@ -189,6 +189,7 @@ public class TaskFragment extends Fragment {
         }else {
             query.whereNotEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }
+        pb_main.setVisibility(View.VISIBLE);
         query.findInBackground(new FindCallback<Mission>() {
             @Override
             public void done(List<Mission> missions, ParseException e) {

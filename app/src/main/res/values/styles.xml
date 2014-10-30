@@ -10,6 +10,7 @@
     <style name="ActTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:displayOptions">showHome|showTitle</item>
+        <!--<item name="android:homeAsUpIndicator">@drawable/ic_action_new</item>-->
     </style>
 
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
@@ -27,6 +28,7 @@
         <item name="android:background">@drawable/bg_titlebar</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/title_bar_height</item>
+
     </style>
 
     <style name="title_btn_style">
@@ -38,6 +40,7 @@
     <style name="title_btn_normal_style">
         <item name="android:background">@drawable/btn_title_done_nomal</item>
         <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <style name="tv_list_title">
@@ -84,7 +87,7 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:textColor">#ff898989</item>
-        <item name="android:gravity">left</item>
+        <item name="android:gravity">right</item>
     </style>
 
     <style name="et_new">
@@ -96,7 +99,7 @@
         <item name="android:textColor">#f14a4a4a</item>
         <item name="android:textColorHint">#CCCCCC</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:gravity">right</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="MyDialogStyle">
@@ -185,17 +188,7 @@
         <item name="android:windowTitleSize">@dimen/title_bar_height</item>
     </style>
 
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
 
-    <style name="AppTheme2" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
 
 
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,15 +6,14 @@
     android:minHeight="50dp">
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center">
+        android:layout_height="50dp">
         <TextView
             style="@style/et_new"
             android:id="@+id/spinner_priority_priority"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:text="TextView"
-            android:gravity="center_vertical|center_horizontal"
+            android:gravity="center_vertical"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />

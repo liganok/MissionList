@@ -71,6 +71,7 @@
                     android:layout_toRightOf="@+id/tv_new_priority">
                     <Spinner
                         style="@style/et_new"
+                        android:gravity="left"
                         android:layout_gravity="left"
                         android:layout_alignParentLeft="true"
                         android:id="@+id/spinner_priority">

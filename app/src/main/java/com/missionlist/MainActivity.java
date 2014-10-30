@@ -104,7 +104,8 @@ public class MainActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
-            tabAdapter.notifyDataSetChanged();
+            TaskFragment taskFragment = (TaskFragment) tabAdapter.getItem(0);
+            taskFragment.getList(1);
         }
     }
 
