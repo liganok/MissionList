@@ -2,20 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_bg_color"
+    android:layout_marginLeft="@dimen/text_group_margin"
+    android:layout_marginRight="6dp"
+    android:layout_marginTop="@dimen/text_group_margin"
     tools:context="com.missionlist.ItemActivity">
 
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2">
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_top"
                 android:id="@+id/relativeLayout">
                 <TextView
                     style="@style/tv_new"
@@ -29,7 +29,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_middle"
                 android:id="@+id/relativeLayout1"
                 android:layout_below="@+id/relativeLayout">
                 <TextView
@@ -44,7 +44,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_middle"
                 android:id="@+id/relativeLayout2"
                 android:layout_below="@+id/relativeLayout1">
                 <TextView
@@ -58,7 +58,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_middle"
                 android:id="@+id/relativeLayout3"
                 android:layout_below="@+id/relativeLayout2">
                 <TextView
@@ -86,7 +86,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_middle"
                 android:id="@+id/relativeLayout4"
                 android:layout_below="@+id/relativeLayout3">
                 <TextView
@@ -100,7 +100,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                style="@style/rl_new"
+                style="@style/text_group_bottom"
                 android:id="@+id/relativeLayout5"
                 android:layout_below="@+id/relativeLayout4">
                 <TextView
@@ -114,7 +114,39 @@
                     android:layout_toRightOf="@+id/tv_new_des" />
             </RelativeLayout>
         </RelativeLayout>
-
     </ScrollView>
+
+    <LinearLayout
+        style="@style/et_new"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/scrollView2"
+        android:showDividers="beginning"
+        android:divider="@color/activity_bg_color">
+
+        <EditText
+            style="@style/et_new"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/editText2"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="?android:attr/listDivider"
+            />
+
+        <EditText
+            style="@style/et_new"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:ems="10"
+            android:text="test1" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -29,7 +29,6 @@
         android:hint="请输入密码"/>
 
     <Button
-        style="@style/BtnText"
         android:id="@+id/btn_signup"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
