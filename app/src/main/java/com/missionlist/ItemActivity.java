@@ -53,7 +53,7 @@ public class ItemActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
+        setContentView(R.layout.activity_item_new);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_new);
         initView();

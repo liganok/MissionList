@@ -72,7 +72,6 @@
     </style>
 
     <style name="rl_new">
-        <item name="android:background">#ffffff</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_marginTop">5dp</item>
@@ -89,7 +88,7 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:textColor">#ff898989</item>
-        <item name="android:gravity">right</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="et_new">
@@ -193,6 +192,12 @@
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:background">@drawable/bg_text_group_bottom</item>
+    </style>
+
+    <style name="text_group">
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/bg_text_group</item>
     </style>
 
 

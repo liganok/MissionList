@@ -12,7 +12,10 @@
     <dimen name="tv_new_head_height">32dp</dimen>
 
     <!-- Text group. -->
-    <dimen name="bg_group_radius">7dp</dimen>
-    <dimen name="text_group_margin">10dp</dimen>
+    <dimen name="bg_group_radius">10dp</dimen>
+    <dimen name="text_group_margin">12dp</dimen>
+    <dimen name="text_group_divider">0.5dp</dimen>
+
+
 
 </resources>
