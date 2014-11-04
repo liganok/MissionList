@@ -11,4 +11,13 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="solid_color">#ff6d6d6d</color>
 
+    <!-- default -->
+    <color name="default_light_grey_color">#929292</color>
+    <color name="default_blue_color">#01aff4</color>
+    <color name="default_fragment_bk_color">#f2f2f2</color>
+    <color name="default_value_color">#333333</color>
+    <color name="default_key_color">#ff626262</color>
+    <color name="default_hint_color">#7d383838</color>
+    <color name="default_line_color">#cccccc</color>
+
 </resources>

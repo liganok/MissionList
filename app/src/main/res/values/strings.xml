@@ -17,6 +17,10 @@
     <string name="priority_high">High</string>
     <string name="title_activity_my">MyActivity</string>
 
+    <!--Activity: activity_item_new-->
+    <string name="et_new_title_task">Input task tile</string>
+    <string name="et_new_title_group">Input group tile</string>
+
     <string-array name="category">
         <item>Task</item>
         <item>Task Group</item>

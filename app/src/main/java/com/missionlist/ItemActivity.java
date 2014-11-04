@@ -53,7 +53,7 @@ public class ItemActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_new);
+        setContentView(R.layout.activity_item);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_new);
         initView();
@@ -69,7 +69,7 @@ public class ItemActivity extends Activity {
         title = (EditText)findViewById(R.id.et_new_title);
         start_date = (EditText)findViewById(R.id.et_new_start_date);
         due_date = (EditText)findViewById(R.id.et_new_due_date);
-        priority = (EditText)findViewById(R.id.et_priority);
+        //priority = (EditText)findViewById(R.id.et_priority);
         prioritySpinner = (Spinner)findViewById(R.id.spinner_priority);
         occurrence = (EditText)findViewById(R.id.et_new_occurrence);
         description = (EditText)findViewById(R.id.et_new_des);

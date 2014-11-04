@@ -16,6 +16,8 @@
     <dimen name="text_group_margin">12dp</dimen>
     <dimen name="text_group_divider">0.5dp</dimen>
 
+    <!-- activity_item. -->
+    <dimen name="default_padding_left">15dp</dimen>
 
 
 </resources>
