@@ -1,5 +1,9 @@
 package com.missionlist.fragment;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -8,9 +12,29 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.missionlist.DialogActivity;
+import com.missionlist.ItemActivity;
+import com.missionlist.R;
+import com.missionlist.adapter.MListAdapter;
+import com.missionlist.model.Mission;
+import com.missionlist.util.Util;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 通讯录Fragment的界面
@@ -20,22 +44,135 @@ import android.widget.TextView;
  * @author guolin
  */
 public class TaskGroupFragment extends Fragment {
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		FrameLayout fl = new FrameLayout(getActivity());
-		fl.setLayoutParams(params);
-		DisplayMetrics dm = getResources().getDisplayMetrics();
-		final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, dm);
-		TextView v = new TextView(getActivity());
-		params.setMargins(margin, margin, margin, margin);
-		v.setLayoutParams(params);
-		v.setLayoutParams(params);
-		v.setGravity(Gravity.CENTER);
-		v.setText("通讯录界面");
-		v.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, dm));
-		fl.addView(v);
-		return fl;
-	}
+    //Variable
+    private MListAdapter mListAdapter;
+    private ListView list;
+    private final static int TO_DO = 1;
+    private final static int DONE = 2;
+    private int listType;
+    private RelativeLayout pb_main;
+    private RelativeLayout titleBar;
+
+    private static final int ACTIVITY_EDIT = 1;
+    private static final int ACTIVITY_DIALOG = 2;
+
+    private View view;
+    private Activity activity;
+
+    final List<Map<String,Object>> listItems = new ArrayList<Map<String, Object>>();
+    private List<Mission> mList = new ArrayList<Mission>();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        if (view != null){
+            //view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_me, null);
+            ViewGroup viewGroup = (ViewGroup) view.getParent();
+            if (viewGroup != null){
+                viewGroup.removeAllViewsInLayout();
+            }
+        }
+        view = inflater.inflate(R.layout.fragment_task, container, false);
+        initView();
+        getList();
+        return view;
+    }
+
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    //Initial view
+    private void initView(){
+        pb_main = (RelativeLayout)view.findViewById(R.id.rl_progressBar);
+        titleBar = (RelativeLayout)view.findViewById(R.id.include);
+        list = (ListView) view.findViewById(R.id.task_List);
+        pb_main.setVisibility(View.VISIBLE);
+        titleBar.setVisibility(View.GONE);
+        mListAdapter = new MListAdapter(activity,mList);
+        list.setAdapter(mListAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(activity,ItemActivity.class);
+                Mission mission = mList.get(position);
+
+                if (mission.getObjectId() != null){
+                    intent.putExtra(Mission.ID,mission.getObjectId());
+                }else{
+                    if (mission.getLocalId() != null){
+                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                    }
+                }
+                startActivityForResult(intent, ACTIVITY_EDIT);
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(activity, DialogActivity.class);
+                Mission mission = mList.get(position);
+
+                if (mission.getObjectId() != null){
+                    intent.putExtra(Mission.ID,mission.getObjectId());
+                }else{
+                    if (mission.getLocalId() != null){
+                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                    }
+                }
+                startActivityForResult(intent,ACTIVITY_DIALOG);
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            getList();
+        }
+    }
+
+    public void getList(){
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.fromLocalDatastore();
+        query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
+        query.whereEqualTo(Mission.IS_DELETE,false);
+        query.whereNotEqualTo(Mission.CATEGORY,1);
+        query.whereEqualTo(Mission.PARENT_ID,null);
+
+        pb_main.setVisibility(View.VISIBLE);
+        query.findInBackground(new FindCallback<Mission>() {
+            @Override
+            public void done(List<Mission> missions, ParseException e) {
+                mList.clear();
+                pb_main.setVisibility(View.INVISIBLE);
+                if (e == null){
+                    if ((missions != null) && !(missions.isEmpty())){
+                        Mission mission = new Mission();
+                        mission.setTitle(getResources().getString(R.string.not_assigned));
+                        mission.setPriority(1);
+                        mList.add(mission);
+                    }
+
+                    Util.showMessage(activity.getApplicationContext(), "Get local data success", Toast.LENGTH_SHORT);
+                }else {
+                    Util.showMessage(activity.getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
+                }
+                mListAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

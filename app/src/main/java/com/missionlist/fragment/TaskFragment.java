@@ -37,11 +37,8 @@ import java.util.Map;
 public class TaskFragment extends Fragment {
 
     //Variable
-    private FrameLayout top_head_me;
-    private FrameLayout top_head_add;
     private Button btn_to_do;
     private Button btn_done;
-    //private ProgressBar pb_main;
     private RelativeLayout pb_main;
     private int tab_type;
     private SimpleAdapter simpleAdapter;

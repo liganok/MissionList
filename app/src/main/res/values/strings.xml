@@ -28,4 +28,7 @@
 
     <string name="title_activity_item_group">ItemGroupActivity</string>
 
+    <!--TaskGroupFragment-->
+    <string name="not_assigned">Not assigned</string>
+
 </resources>
