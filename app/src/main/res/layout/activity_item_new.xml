@@ -1,0 +1,172 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/text_group_margin"
+    android:layout_marginRight="@dimen/text_group_margin"
+    android:layout_marginTop="@dimen/text_group_margin"
+    tools:context="com.missionlist.ItemActivity">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                style="@style/text_group"
+                android:layout_marginBottom="@dimen/text_group_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    style="@style/rl_new">
+                    <EditText
+                        style="@style/et_new"
+                        android:hint="@string/et_new_title_task"
+                        android:id="@+id/et_new_title" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/text_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Title"
+                        android:id="@+id/tv_new_title" />
+
+                    <EditText
+                        style="@style/et_new"
+                        android:id="@+id/et_new_title"
+                        android:layout_toRightOf="@+id/tv_new_title" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/text_group_divider"
+                    android:background="?android:attr/listDivider"
+                    />
+                    -->
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout1"
+                    android:layout_below="@+id/relativeLayout">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Start Date"
+                        android:id="@+id/tv_new_start_date" />
+
+                    <EditText
+                        style="@style/et_new"
+                        android:id="@+id/et_new_start_date"
+                        android:layout_toRightOf="@+id/tv_new_start_date" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/text_group_divider"
+                    android:background="?android:attr/listDivider"
+                    />
+
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout2"
+                    android:layout_below="@+id/relativeLayout1">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Due Date"
+                        android:id="@+id/tv_new_due_date" />
+                    <EditText
+                        style="@style/et_new"
+                        android:id="@+id/et_new_due_date"
+                        android:layout_toRightOf="@+id/tv_new_due_date" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/text_group_divider"
+                    android:background="?android:attr/listDivider"
+                    />
+
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout3"
+                    android:layout_below="@+id/relativeLayout2">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Priority"
+                        android:id="@+id/tv_new_priority" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tv_new_priority">
+                        <Spinner
+                            style="@style/et_new"
+                            android:gravity="left"
+                            android:layout_gravity="left"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/spinner_priority">
+                        </Spinner>
+                    </LinearLayout>
+
+                    <EditText
+                        style="@style/et_new"
+                        android:id="@+id/et_priority"
+                        android:visibility="gone"
+                        android:layout_toRightOf="@+id/tv_new_priority" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/text_group_divider"
+                    android:background="?android:attr/listDivider"
+                    />
+
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout4"
+                    android:layout_below="@+id/relativeLayout3">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Occurrence"
+                        android:id="@+id/tv_new_occurrence" />
+                    <EditText
+                        style="@style/et_new"
+                        android:id="@+id/et_new_occurrence"
+                        android:layout_toRightOf="@+id/tv_new_occurrence" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/text_group_divider"
+                    android:background="?android:attr/listDivider"
+                    />
+
+                <RelativeLayout
+                    style="@style/rl_new"
+                    android:id="@+id/relativeLayout5"
+                    android:layout_below="@+id/relativeLayout4">
+                    <TextView
+                        style="@style/tv_new"
+                        android:text = "Description"
+                        android:id="@+id/tv_new_des" />
+                    <EditText
+                        style="@style/et_new"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/et_new_des"
+                        android:layout_toRightOf="@+id/tv_new_des" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
