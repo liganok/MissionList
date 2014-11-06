@@ -166,7 +166,20 @@ public class TaskGroupFragment extends Fragment {
                         mission.setPriority(1);
                         mList.add(mission);
                     }
-
+                    ParseQuery<Mission> query = Mission.getQuery();
+                    query.fromLocalDatastore();
+                    query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
+                    query.whereEqualTo(Mission.IS_DELETE,false);
+                    query.whereEqualTo(Mission.CATEGORY, 1);
+                    query.whereEqualTo(Mission.PARENT_ID,null);
+                    query.findInBackground(new FindCallback<Mission>() {
+                        @Override
+                        public void done(List<Mission> missions, ParseException e) {
+                            if (e == null){
+                                mList.addAll(missions);
+                            }
+                        }
+                    });
                     Util.showMessage(activity.getApplicationContext(), "Get local data success", Toast.LENGTH_SHORT);
                 }else {
                     Util.showMessage(activity.getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);

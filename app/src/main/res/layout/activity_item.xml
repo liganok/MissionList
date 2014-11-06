@@ -23,7 +23,8 @@
                 android:background="@drawable/bg_text_group"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/default_padding_left"
-                android:shrinkColumns="1">
+                android:shrinkColumns="1"
+                android:stretchColumns="2">
 
                 <TableRow>
                     <TextView
@@ -38,6 +39,7 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="0.5dp"
+                    android:layout_marginRight="@dimen/default_padding_left"
                     android:background="@color/default_line_color" />
 
                 <TableRow>
@@ -60,7 +62,8 @@
                 android:background="@drawable/bg_text_group"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/default_padding_left"
-                android:shrinkColumns="1">
+                android:shrinkColumns="1"
+                android:stretchColumns="2">
 
                 <TableRow>
                     <TextView
@@ -79,6 +82,7 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="0.5dp"
+                    android:layout_marginRight="@dimen/default_padding_left"
                     android:background="@color/default_line_color" />
 
                 <TableRow>
@@ -95,6 +99,7 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="0.5dp"
+                    android:layout_marginRight="@dimen/default_padding_left"
                     android:background="@color/default_line_color" />
 
                 <TableRow>
@@ -113,6 +118,7 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="0.5dp"
+                    android:layout_marginRight="@dimen/default_padding_left"
                     android:background="@color/default_line_color" />
 
                 <TableRow>

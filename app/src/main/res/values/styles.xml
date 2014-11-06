@@ -95,7 +95,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">16sp</item>
         <item name="android:layout_column">1</item>
-        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:padding">1dp</item>
         <item name="android:textColor">@color/default_value_color</item>

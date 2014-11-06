@@ -164,6 +164,7 @@ public class ItemActivity extends Activity {
         mission.setStatus(getResources().getIntArray(R.array.status)[1]);
         mission.setAuthor(ParseUser.getCurrentUser());
         mission.setDelete(false);
+        mission.setCategory(1);
         mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
             @Override
             public void done(ParseException e) {

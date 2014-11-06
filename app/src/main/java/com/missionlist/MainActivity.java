@@ -106,6 +106,9 @@ public class MainActivity extends FragmentActivity {
         if (resultCode == Activity.RESULT_OK) {
             TaskFragment taskFragment = (TaskFragment) tabAdapter.getItem(0);
             taskFragment.getList(1);
+
+            TaskGroupFragment taskGroupFragment = (TaskGroupFragment)tabAdapter.getItem(1);
+            taskGroupFragment.getList();
         }
     }
 
