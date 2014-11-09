@@ -1,5 +1,6 @@
 package com.missionlist.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,13 +84,16 @@ public class MListAdapter extends BaseAdapter {
             }
             switch (mission.getPriority()){
                 case -1:
-                    mHolder.itemPriority.setText("Low");
+                    mHolder.itemPriority.setText(mContext.getResources().getStringArray(R.array.priority)[0]);
                     break;
                 case 0:
-                    mHolder.itemPriority.setText("Medium");
+                    mHolder.itemPriority.setText(mContext.getResources().getStringArray(R.array.priority)[0]);
                     break;
                 case 1:
-                    mHolder.itemPriority.setText("High");
+                    mHolder.itemPriority.setText(mContext.getResources().getStringArray(R.array.priority)[1]);
+                    break;
+                case 2:
+                    mHolder.itemPriority.setText(mContext.getResources().getStringArray(R.array.priority)[2]);
                     break;
             }
 

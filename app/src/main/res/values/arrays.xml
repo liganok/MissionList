@@ -6,10 +6,15 @@
         <item>1</item> <!--Done-->
     </integer-array>
 
-    <integer-array name="priority">
-        <item>-1</item> <!--Low-->
-        <item>0</item> <!--Medium-->
-        <item>1</item> <!--High-->
-    </integer-array>
+    <string-array name="priority">
+        <item>Low</item> <!--Low-->
+        <item>Medium</item> <!--Medium-->
+        <item>High</item> <!--High-->
+    </string-array>
+
+    <string-array name="category">
+        <item>Task</item>
+        <item>Task Group</item>
+    </string-array>
 
 </resources>

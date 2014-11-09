@@ -29,23 +29,16 @@ import java.util.Date;
 import java.util.List;
 
 public class ItemActivity extends Activity {
-    //private Mission mission;
-    private String ID ;
-    private String LOCAL_ID ;
     private EditText title;
     private EditText start_date;
     private EditText due_date;
     private EditText category;
-    private EditText priority;
     private EditText occurrence;
     private EditText description;
     private Spinner  prioritySpinner;
-    private FrameLayout save;
-    private FrameLayout close;
     private Dialog dialog;
     private Mission mission;
 
-    private List<Priority> mPrioritys = new ArrayList<Priority>();
 
     private static final int MISSION_DETAIL = 3;
     private static final int MISSION_CREATE = 4;
@@ -55,7 +48,6 @@ public class ItemActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_new);
         initView();
     }
 
@@ -69,89 +61,19 @@ public class ItemActivity extends Activity {
         title = (EditText)findViewById(R.id.et_new_title);
         start_date = (EditText)findViewById(R.id.et_new_start_date);
         due_date = (EditText)findViewById(R.id.et_new_due_date);
-        //priority = (EditText)findViewById(R.id.et_priority);
         prioritySpinner = (Spinner)findViewById(R.id.spinner_priority);
         occurrence = (EditText)findViewById(R.id.et_new_occurrence);
         description = (EditText)findViewById(R.id.et_new_des);
-        save = (FrameLayout)findViewById(R.id.fl_head_save);
-        close = (FrameLayout)findViewById(R.id.fl_head_close);
         dialog = Util.createLoadingDialog(ItemActivity.this);
-        // Initial priority drop list
-        mPrioritys.add(new Priority(getResources().getIntArray(R.array.priority)[0],getString(R.string.priority_low)));
-        mPrioritys.add(new Priority(getResources().getIntArray(R.array.priority)[1],getString(R.string.priority_medium)));
-        mPrioritys.add(new Priority(getResources().getIntArray(R.array.priority)[2],getString(R.string.priority_high)));
-        PriorityAdapter priorityAdapter = new PriorityAdapter(this,mPrioritys);
-        prioritySpinner.setAdapter(priorityAdapter);
 
-        if (getIntent().hasExtra(Mission.ID)){
-            ID = getIntent().getExtras().getString(Mission.ID);
-        }
-        if (getIntent().hasExtra(Mission.LOCAL_ID)){
-            LOCAL_ID = getIntent().getExtras().getString(Mission.LOCAL_ID);
-        }
-
-        if (ID != null){
-            //dialog.show();
-            ParseQuery<Mission> query = Mission.getQuery();
-            query.fromLocalDatastore();
-            //query.whereEqualTo(Mission.ID, ID);
-            try {
-                mission = query.get(ID);
-                title.setText(mission.getTitle());
-                description.setText(mission.getDescription());
-                prioritySpinner.setSelection(priorityAdapter.getPosition(mission.getPriority()),true);
-                SimpleDateFormat    formatter    =   new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss     ");
-                if (mission.getStartDate() != null){
-                    start_date.setText(formatter.format(mission.getStartDate()));
-                }
-                if (mission.getDueDate() != null){
-                    due_date.setText(formatter.format(mission.getDueDate()));
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-        }else {
-            if (LOCAL_ID != null){
-                //dialog.show();
-                ParseQuery<Mission> query = Mission.getQuery();
-                query.fromLocalDatastore();
-                query.whereEqualTo(Mission.LOCAL_ID,LOCAL_ID);
-                try {
-                    mission = query.getFirst();
-                    title.setText(mission.getTitle());
-                    description.setText(mission.getDescription());
-                    prioritySpinner.setSelection(priorityAdapter.getPosition(mission.getPriority()),true);
-                    SimpleDateFormat    formatter    =   new SimpleDateFormat("MM月dd日     ");
-                    if (mission.getStartDate() != null){
-                        start_date.setText(formatter.format(mission.getStartDate()));
-                    }
-                    if (mission.getDueDate() != null){
-                        due_date.setText(formatter.format(mission.getDueDate()));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }else {
-                mission = new Mission();
-                mission.setLocalId();
-            }
-        }
-        prioritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Priority pri = mPrioritys.get(position);
-                if(pri != null){
-                    mission.setPriority(pri.getID());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        mission = Util.getMissionObject(getIntent());
+        if (mission == null){return;}
+        if (mission.getTitle() != null){title.setText(mission.getTitle());}
+        if (mission.getDescription() != null){description.setText(mission.getDescription());}
+        prioritySpinner.setSelection(mission.getPriority(),true);
+        SimpleDateFormat    formatter    =   new SimpleDateFormat("yyyy年MM月dd日");
+        if (mission.getStartDate() != null){start_date.setText(formatter.format(mission.getStartDate()));}
+        if (mission.getDueDate() != null){due_date.setText(formatter.format(mission.getDueDate()));}
     }
 
     public void save(){
@@ -165,6 +87,7 @@ public class ItemActivity extends Activity {
         mission.setAuthor(ParseUser.getCurrentUser());
         mission.setDelete(false);
         mission.setCategory(1);
+        mission.setPriority(prioritySpinner.getSelectedItemPosition());
         mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
             @Override
             public void done(ParseException e) {

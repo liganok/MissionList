@@ -21,10 +21,6 @@
     <string name="et_new_title_task">Input task tile</string>
     <string name="et_new_title_group">Input group tile</string>
 
-    <string-array name="category">
-        <item>Task</item>
-        <item>Task Group</item>
-    </string-array>
 
     <string name="title_activity_item_group">ItemGroupActivity</string>
 
