@@ -2,25 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/text_group_margin"
-    android:layout_marginRight="@dimen/text_group_margin"
-    android:layout_marginTop="@dimen/text_group_margin"
+    android:orientation="vertical"
     tools:context="com.missionlist.ItemActivity">
 
     <ScrollView
+        android:layout_marginTop="@dimen/text_group_margin"
+        android:layout_marginBottom="@dimen/text_group_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView2">
+        android:id="@+id/scrollView_item">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TableLayout
+                android:id="@+id/table_layout_brief"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/bg_text_group"
+                android:background="@color/task_list_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/default_padding_left"
                 android:shrinkColumns="1"
@@ -75,10 +76,11 @@
             </TableLayout>
 
             <TableLayout
+                android:id="@+id/table_layout_more"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_text_group"
+                android:background="@color/task_list_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/default_padding_left"
                 android:shrinkColumns="1"
@@ -153,23 +155,45 @@
                 </TableRow>
             </TableLayout>
 
-            <LinearLayout
-                android:layout_marginTop="@dimen/text_group_margin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ListView
-                    android:background="@color/task_list_bg"
-                    android:divider="@color/list_divider"
-                    android:dividerHeight="0.5px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/task_List"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:entries="@array/priority"
-                    />
-            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/task_list_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/default_padding_left"
+        android:shrinkColumns="2"
+        android:stretchColumns="1">
+
+        <TableRow>
+            <EditText
+                style="@style/et_new"
+                android:layout_marginLeft="0dp"
+                android:id="@+id/item_new_title" />
+            <Button
+                style="@style/et_new"
+                android:text="New"
+                android:layout_toRightOf="@+id/item_new_title"
+                android:onClick="onNewSubItem" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ListView
+            android:background="@color/task_list_bg"
+            android:divider="@color/list_divider"
+            android:dividerHeight="0.5px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_sub_list"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    </LinearLayout>
 
 </LinearLayout>

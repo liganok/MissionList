@@ -18,6 +18,6 @@
     <color name="default_value_color">#333333</color>
     <color name="default_key_color">#ff626262</color>
     <color name="default_hint_color">#7d383838</color>
-    <color name="default_line_color">#cccccc</color>
+    <color name="default_line_color">@color/list_divider</color>
 
 </resources>

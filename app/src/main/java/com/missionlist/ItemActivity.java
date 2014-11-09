@@ -9,15 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.missionlist.adapter.PriorityAdapter;
+import com.missionlist.adapter.MListAdapter;
 import com.missionlist.model.Mission;
-import com.missionlist.model.Priority;
 import com.missionlist.util.Util;
-import com.parse.GetCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -30,14 +31,23 @@ import java.util.List;
 
 public class ItemActivity extends Activity {
     private EditText title;
+    private EditText titleNew;
     private EditText start_date;
     private EditText due_date;
     private EditText category;
     private EditText occurrence;
     private EditText description;
-    private Spinner  prioritySpinner;
+    private Spinner spinnerPriority;
+    private Spinner spinnerCategory;
+    private TableLayout tableLayoutMore;
+    private TableLayout tableLayoutBrief;
+    private ScrollView scrollView;
+    private ListView list;
     private Dialog dialog;
-    private Mission mission;
+    private Mission mMission;
+    private MListAdapter mListAdapter;
+
+    private List<Mission> mList = new ArrayList<Mission>();
 
 
     private static final int MISSION_DETAIL = 3;
@@ -49,6 +59,7 @@ public class ItemActivity extends Activity {
         setContentView(R.layout.activity_item);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
+        getList();
     }
 
     @Override
@@ -59,45 +70,99 @@ public class ItemActivity extends Activity {
 
     private void initView(){
         title = (EditText)findViewById(R.id.et_new_title);
+        titleNew = (EditText)findViewById(R.id.item_new_title);
         start_date = (EditText)findViewById(R.id.et_new_start_date);
         due_date = (EditText)findViewById(R.id.et_new_due_date);
-        prioritySpinner = (Spinner)findViewById(R.id.spinner_priority);
+        spinnerPriority = (Spinner)findViewById(R.id.spinner_priority);
+        spinnerCategory = (Spinner)findViewById(R.id.spinner_category);
         occurrence = (EditText)findViewById(R.id.et_new_occurrence);
         description = (EditText)findViewById(R.id.et_new_des);
         dialog = Util.createLoadingDialog(ItemActivity.this);
+        list = (ListView)findViewById(R.id.group_sub_list);
+        tableLayoutMore = (TableLayout)findViewById(R.id.table_layout_more);
+        tableLayoutBrief = (TableLayout)findViewById(R.id.table_layout_brief);
+        scrollView = (ScrollView)findViewById(R.id.scrollView_item);
 
-        mission = Util.getMissionObject(getIntent());
-        if (mission == null){return;}
-        if (mission.getTitle() != null){title.setText(mission.getTitle());}
-        if (mission.getDescription() != null){description.setText(mission.getDescription());}
-        prioritySpinner.setSelection(mission.getPriority(),true);
+        mMission = Util.getMissionObject(getIntent());
+        if (mMission == null){return;}
+        if (mMission.getTitle() != null){title.setText(mMission.getTitle());}
+        if (mMission.getDescription() != null){description.setText(mMission.getDescription());}
+        spinnerPriority.setSelection(mMission.getPriority(), true);
+        spinnerCategory.setSelection(mMission.getCategory(),true);
         SimpleDateFormat    formatter    =   new SimpleDateFormat("yyyy年MM月dd日");
-        if (mission.getStartDate() != null){start_date.setText(formatter.format(mission.getStartDate()));}
-        if (mission.getDueDate() != null){due_date.setText(formatter.format(mission.getDueDate()));}
+        if (mMission.getStartDate() != null){start_date.setText(formatter.format(mMission.getStartDate()));}
+        if (mMission.getDueDate() != null){due_date.setText(formatter.format(mMission.getDueDate()));}
+        if (mMission.getCategory() == 1){tableLayoutMore.setVisibility(View.GONE);}
+        if (getIntent().hasExtra(Mission.CATEGORY)){
+            if (getIntent().getExtras().getInt(Mission.CATEGORY)==2){
+                tableLayoutBrief.setVisibility(View.GONE);
+                tableLayoutMore.setVisibility(View.GONE);
+                scrollView.setVisibility(View.GONE);
+                mMission.setCategory(2);
+            }
+        }
+
+        mListAdapter = new MListAdapter(this,mList);
+        list.setAdapter(mListAdapter);
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 1){
+                    tableLayoutMore.setVisibility(View.GONE);
+                }else {
+                    tableLayoutMore.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ItemActivity.this,ItemActivity.class);
+                Mission mission = mList.get(position);
+
+                if (mission.getObjectId() != null){
+                    intent.putExtra(Mission.ID,mission.getObjectId());
+                }else{
+                    if (mission.getLocalId() != null){
+                        intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                    }else {
+                        intent.putExtra(Mission.CATEGORY,2);
+                    }
+                }
+                startActivityForResult(intent, MISSION_DETAIL);
+            }
+        });
     }
 
     public void save(){
         dialog.show();
-        mission.setTitle(title.getText().toString());
-        mission.setDescription(description.getText().toString());
-        mission.setDraft(true);
-        mission.setStartDate(new Date(System.currentTimeMillis()));
-        mission.setDueDate(new Date(System.currentTimeMillis()));
-        mission.setStatus(getResources().getIntArray(R.array.status)[1]);
-        mission.setAuthor(ParseUser.getCurrentUser());
-        mission.setDelete(false);
-        mission.setCategory(1);
-        mission.setPriority(prioritySpinner.getSelectedItemPosition());
-        mission.pinInBackground(MListApp.GROUP_NAME,new SaveCallback() {
+        mMission.setTitle(title.getText().toString());
+        mMission.setDescription(description.getText().toString());
+        mMission.setDraft(true);
+        mMission.setStartDate(new Date(System.currentTimeMillis()));
+        mMission.setDueDate(new Date(System.currentTimeMillis()));
+        mMission.setStatus(getResources().getIntArray(R.array.status)[1]);
+        mMission.setAuthor(ParseUser.getCurrentUser());
+        mMission.setDelete(false);
+        mMission.setCategory(spinnerCategory.getSelectedItemPosition());
+        mMission.setPriority(spinnerPriority.getSelectedItemPosition());
+        mMission.pinInBackground(MListApp.GROUP_NAME, new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 dialog.cancel();
-                if (e==null){
+                if (e == null) {
                     setResult(Activity.RESULT_OK);
-                    Util.showMessage(getApplicationContext(),"Save in local success", Toast.LENGTH_SHORT);
+                    Util.showMessage(getApplicationContext(), "Save in local success", Toast.LENGTH_SHORT);
                     finish();
-                }else {
-                    Util.showMessage(getApplicationContext(),"Save in local failed", Toast.LENGTH_SHORT);
+                } else {
+                    Util.showMessage(getApplicationContext(), "Save in local failed", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -116,5 +181,66 @@ public class ItemActivity extends Activity {
         return true;
     }
 
+    public void getList(){
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.fromLocalDatastore();
+        query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
+        query.whereEqualTo(Mission.IS_DELETE,false);
+        switch (mMission.getCategory()){
+            case 0:
+                return;
+            case 1://get sub items
+                query.whereNotEqualTo(Mission.PARENT,null);
+                query.whereEqualTo(Mission.PARENT,mMission);
+                break;
+            case 2://get tasks
+                query.whereEqualTo(Mission.CATEGORY,0);
+                query.whereEqualTo(Mission.PARENT,null);
+                break;
+        }
+        //pb_main.setVisibility(View.VISIBLE);
+        query.findInBackground(new FindCallback<Mission>() {
+            @Override
+            public void done(List<Mission> missions, ParseException e) {
+                mList.clear();
+                if (e == null){
+                    mList.addAll(missions);
+                    mListAdapter.notifyDataSetChanged();
+                    Util.showMessage(getApplicationContext(), "Get local data success", Toast.LENGTH_SHORT);
+                }else {
+                    Util.showMessage(getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    public void onNewSubItem(View view){
+        dialog.show();
+        Mission mission = new Mission();
+        mission.setLocalId();
+        mission.setTitle(titleNew.getText().toString());
+        mission.setDraft(true);
+        mission.setStartDate(new Date(System.currentTimeMillis()));
+        mission.setDueDate(new Date(System.currentTimeMillis()));
+        mission.setStatus(getResources().getIntArray(R.array.status)[1]);
+        mission.setAuthor(ParseUser.getCurrentUser());
+        mission.setDelete(false);
+        mission.setCategory(0);
+        mission.setPriority(1);
+        mission.setParentId(mMission);
+        mission.pinInBackground(MListApp.GROUP_NAME, new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                dialog.cancel();
+                if (e == null) {
+                    getList();
+                    Util.showMessage(getApplicationContext(), "Save in local success", Toast.LENGTH_SHORT);
+
+                } else {
+                    Util.showMessage(getApplicationContext(), "Save in local failed", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
 
 }

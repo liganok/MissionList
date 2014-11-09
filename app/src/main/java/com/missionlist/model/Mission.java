@@ -15,7 +15,7 @@ import java.util.UUID;
 @ParseClassName("Mission")
 public class Mission extends ParseObject implements Serializable {
     public static final String ID = "ID";
-    public static final String PARENT_ID = "PARENT";
+    public static final String PARENT = "PARENT";
     public static final String TITLE = "TITLE";
     public static final String START_DATE = "START_DATE";
     public static final String DUE_DATE = "DUE_DATE";
@@ -63,8 +63,8 @@ public class Mission extends ParseObject implements Serializable {
     public ParseUser getAuthor() {return getParseUser(Mission.AUTHOR); }
     public void setAuthor(ParseUser currentUser) {if (currentUser != null){put(Mission.AUTHOR, currentUser);}}
 
-    public String getParent(){return getString(Mission.PARENT_ID);}
-    public void setParentId(String parentId){put(Mission.PARENT_ID,parentId);}
+    public Mission getParent(){ return (Mission) getParseObject(Mission.PARENT);}
+    public void setParentId(Mission parentId){put(Mission.PARENT,parentId);}
 
     public void setLocalId() {
         UUID uuid = UUID.randomUUID();

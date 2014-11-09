@@ -1,24 +1,15 @@
 package com.missionlist.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.missionlist.DialogActivity;
@@ -50,7 +41,7 @@ public class TaskGroupFragment extends Fragment {
     private final static int TO_DO = 1;
     private final static int DONE = 2;
     private int listType;
-    private RelativeLayout pb_main;
+    private RelativeLayout processBar;
     private RelativeLayout titleBar;
 
     private static final int ACTIVITY_EDIT = 1;
@@ -92,10 +83,10 @@ public class TaskGroupFragment extends Fragment {
 
     //Initial view
     private void initView(){
-        pb_main = (RelativeLayout)view.findViewById(R.id.rl_progressBar);
+        processBar = (RelativeLayout)view.findViewById(R.id.rl_progressBar);
         titleBar = (RelativeLayout)view.findViewById(R.id.include);
         list = (ListView) view.findViewById(R.id.task_List);
-        pb_main.setVisibility(View.VISIBLE);
+        processBar.setVisibility(View.VISIBLE);
         titleBar.setVisibility(View.GONE);
         mListAdapter = new MListAdapter(activity,mList);
         list.setAdapter(mListAdapter);
@@ -111,6 +102,8 @@ public class TaskGroupFragment extends Fragment {
                 }else{
                     if (mission.getLocalId() != null){
                         intent.putExtra(Mission.LOCAL_ID,mission.getLocalId());
+                    }else {
+                        intent.putExtra(Mission.CATEGORY,2);
                     }
                 }
                 startActivityForResult(intent, ACTIVITY_EDIT);
@@ -151,19 +144,17 @@ public class TaskGroupFragment extends Fragment {
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
         query.whereEqualTo(Mission.IS_DELETE,false);
         query.whereNotEqualTo(Mission.CATEGORY,1);
-        query.whereEqualTo(Mission.PARENT_ID,null);
+        query.whereEqualTo(Mission.PARENT,null);
 
-        pb_main.setVisibility(View.VISIBLE);
+        processBar.setVisibility(View.VISIBLE);
         query.findInBackground(new FindCallback<Mission>() {
             @Override
             public void done(List<Mission> missions, ParseException e) {
                 mList.clear();
-                pb_main.setVisibility(View.INVISIBLE);
                 if (e == null){
                     if ((missions != null) && !(missions.isEmpty())){
                         Mission mission = new Mission();
                         mission.setTitle(getResources().getString(R.string.not_assigned));
-                        mission.setPriority(1);
                         mList.add(mission);
                     }
                     ParseQuery<Mission> query = Mission.getQuery();
@@ -171,12 +162,14 @@ public class TaskGroupFragment extends Fragment {
                     query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
                     query.whereEqualTo(Mission.IS_DELETE,false);
                     query.whereEqualTo(Mission.CATEGORY, 1);
-                    query.whereEqualTo(Mission.PARENT_ID,null);
+                    query.whereEqualTo(Mission.PARENT,null);
                     query.findInBackground(new FindCallback<Mission>() {
                         @Override
                         public void done(List<Mission> missions, ParseException e) {
                             if (e == null){
+                                processBar.setVisibility(View.INVISIBLE);
                                 mList.addAll(missions);
+                                mListAdapter.notifyDataSetChanged();
                             }
                         }
                     });
@@ -184,7 +177,6 @@ public class TaskGroupFragment extends Fragment {
                 }else {
                     Util.showMessage(activity.getApplicationContext(),"Get local data failed",Toast.LENGTH_SHORT);
                 }
-                mListAdapter.notifyDataSetChanged();
             }
         });
     }
