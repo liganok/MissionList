@@ -41,11 +41,13 @@ public class ItemActivity extends Activity {
     private Spinner spinnerCategory;
     private TableLayout tableLayoutMore;
     private TableLayout tableLayoutBrief;
+    private TableLayout tableLayoutNew;
     private ScrollView scrollView;
     private ListView list;
     private Dialog dialog;
     private Mission mMission;
     private MListAdapter mListAdapter;
+    private int mCategory;
 
     private List<Mission> mList = new ArrayList<Mission>();
 
@@ -81,6 +83,7 @@ public class ItemActivity extends Activity {
         list = (ListView)findViewById(R.id.group_sub_list);
         tableLayoutMore = (TableLayout)findViewById(R.id.table_layout_more);
         tableLayoutBrief = (TableLayout)findViewById(R.id.table_layout_brief);
+        tableLayoutNew = (TableLayout)findViewById(R.id.table_layout_new);
         scrollView = (ScrollView)findViewById(R.id.scrollView_item);
 
         mMission = Util.getMissionObject(getIntent());
@@ -93,13 +96,26 @@ public class ItemActivity extends Activity {
         if (mMission.getStartDate() != null){start_date.setText(formatter.format(mMission.getStartDate()));}
         if (mMission.getDueDate() != null){due_date.setText(formatter.format(mMission.getDueDate()));}
         if (mMission.getCategory() == 1){tableLayoutMore.setVisibility(View.GONE);}
+
         if (getIntent().hasExtra(Mission.CATEGORY)){
-            if (getIntent().getExtras().getInt(Mission.CATEGORY)==2){
+            mCategory = getIntent().getExtras().getInt(Mission.CATEGORY);
+            mMission.setCategory(2);
+        }else {
+            mCategory = mMission.getCategory();
+        }
+
+        switch (mCategory){
+            case 1:
+                spinnerCategory.setEnabled(false);
+                tableLayoutMore.setVisibility(View.GONE);
+                break;
+            case 2:
                 tableLayoutBrief.setVisibility(View.GONE);
                 tableLayoutMore.setVisibility(View.GONE);
                 scrollView.setVisibility(View.GONE);
-                mMission.setCategory(2);
-            }
+                break;
+            default:
+                tableLayoutNew.setVisibility(View.GONE);
         }
 
         mListAdapter = new MListAdapter(this,mList);
@@ -109,8 +125,10 @@ public class ItemActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1){
                     tableLayoutMore.setVisibility(View.GONE);
+                    tableLayoutNew.setVisibility(View.VISIBLE);
                 }else {
                     tableLayoutMore.setVisibility(View.VISIBLE);
+                    tableLayoutNew.setVisibility(View.GONE);
                 }
             }
 
@@ -227,7 +245,7 @@ public class ItemActivity extends Activity {
         mission.setDelete(false);
         mission.setCategory(0);
         mission.setPriority(1);
-        mission.setParentId(mMission);
+        if(mMission.getCategory() == 1){mission.setParentId(mMission);}
         mission.pinInBackground(MListApp.GROUP_NAME, new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -242,5 +260,4 @@ public class ItemActivity extends Activity {
             }
         });
     }
-
 }
