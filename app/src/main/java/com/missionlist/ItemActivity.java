@@ -49,6 +49,10 @@ public class ItemActivity extends Activity {
     private MListAdapter mListAdapter;
     private int mCategory;
 
+    //Menu items
+    private MenuItem menuItemEdit;
+    private MenuItem menuItemSave;
+
     private List<Mission> mList = new ArrayList<Mission>();
 
 
@@ -67,6 +71,9 @@ public class ItemActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_item, menu);
+        //Menu item
+        menuItemEdit = menu.findItem(R.id.action_edit);
+        menuItemSave = menu.findItem(R.id.action_save);
         return true;
     }
 
@@ -85,6 +92,15 @@ public class ItemActivity extends Activity {
         tableLayoutBrief = (TableLayout)findViewById(R.id.table_layout_brief);
         tableLayoutNew = (TableLayout)findViewById(R.id.table_layout_new);
         scrollView = (ScrollView)findViewById(R.id.scrollView_item);
+
+        //Set disable as default status
+        title.setEnabled(false);
+        start_date.setEnabled(false);
+        due_date.setEnabled(false);
+        description.setEnabled(false);
+        spinnerCategory.setEnabled(false);
+        spinnerPriority.setEnabled(false);
+        occurrence.setEnabled(false);
 
         mMission = Util.getMissionObject(getIntent());
         if (mMission == null){return;}
@@ -115,8 +131,10 @@ public class ItemActivity extends Activity {
                 scrollView.setVisibility(View.GONE);
                 break;
             default:
-                tableLayoutNew.setVisibility(View.GONE);
+
         }
+
+        tableLayoutNew.setVisibility(View.GONE);
 
         mListAdapter = new MListAdapter(this,mList);
         list.setAdapter(mListAdapter);
@@ -159,7 +177,7 @@ public class ItemActivity extends Activity {
         });
     }
 
-    public void save(){
+    public void actionSave(){
         dialog.show();
         mMission.setTitle(title.getText().toString());
         mMission.setDescription(description.getText().toString());
@@ -190,13 +208,31 @@ public class ItemActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
-                save();
+                actionSave();
                 break;
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.action_edit:
+                actionEdit();
+
         }
         return true;
+    }
+
+    private void actionEdit(){
+        menuItemSave.setVisible(true);
+        menuItemEdit.setVisible(false);
+        if (mCategory != 0){
+            tableLayoutNew.setVisibility(View.VISIBLE);
+        }
+        title.setEnabled(true);
+        start_date.setEnabled(true);
+        due_date.setEnabled(true);
+        description.setEnabled(true);
+        spinnerCategory.setEnabled(true);
+        spinnerPriority.setEnabled(true);
+        occurrence.setEnabled(true);
     }
 
     public void getList(){
@@ -245,6 +281,7 @@ public class ItemActivity extends Activity {
         mission.setDelete(false);
         mission.setCategory(0);
         mission.setPriority(1);
+        titleNew.setText("");
         if(mMission.getCategory() == 1){mission.setParentId(mMission);}
         mission.pinInBackground(MListApp.GROUP_NAME, new SaveCallback() {
             @Override

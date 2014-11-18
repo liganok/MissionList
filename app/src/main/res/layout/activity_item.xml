@@ -96,6 +96,7 @@
                     <EditText
                         style="@style/et_new"
                         android:layout_column="1"
+                        android:inputType="date"
                         android:id="@+id/et_new_start_date"
                         android:layout_toRightOf="@+id/tv_new_start_date" />
                 </TableRow>
@@ -114,6 +115,7 @@
                     <EditText
                         style="@style/et_new"
                         android:id="@+id/et_new_due_date"
+                        android:inputType="date"
                         android:layout_toRightOf="@+id/tv_new_due_date" />
                 </TableRow>
 

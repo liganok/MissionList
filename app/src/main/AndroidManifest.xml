@@ -13,7 +13,8 @@
         <activity
             android:name=".ItemActivity"
             android:label="@string/title_activity_new"
-            android:theme="@style/ActTheme" >
+            android:theme="@style/ActTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
         </activity>
         <activity
             android:name=".DialogActivity"
