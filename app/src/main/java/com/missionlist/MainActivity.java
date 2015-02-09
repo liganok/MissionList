@@ -2,6 +2,7 @@ package com.missionlist;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,12 +19,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.missionlist.adapter.TabAdapter;
 import com.missionlist.astuetz.PagerSlidingTabStrip;
 import com.missionlist.fragment.TaskGroupFragment;
 import com.missionlist.fragment.MeFragment;
 import com.missionlist.fragment.TaskFragment;
+import com.missionlist.model.Mission;
+import com.missionlist.util.Util;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 
 public class MainActivity extends FragmentActivity {
@@ -90,11 +97,12 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_new_task:
+            case R.id.action_new:
                 Intent intent = new Intent(this,ItemActivity.class);
                 startActivityForResult(intent, ACTIVITY_CREATE);
                 break;
-            case R.id.action_new_task_group:
+            case R.id.action_refresh:
+                sync();
                 break;
         }
         return true;
@@ -138,6 +146,32 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sync(){
+        ParseQuery<Mission> query = Mission.getQuery();
+        query.fromPin(MListApp.GROUP_NAME);
+        query.findInBackground(new FindCallback<Mission>() {
+            @Override
+            public void done(List<Mission> missions, ParseException e) {
+                if(e==null){
+                    for(Mission mission:missions){
+                        if(mission.getDelete() == true){
+                            mission.deleteInBackground();
+                            mission.unpinInBackground(MListApp.GROUP_NAME);
+                        }else {
+                            mission.setDraft(false);
+                            mission.saveInBackground();
+                            mission.pinInBackground(MListApp.GROUP_NAME);
+                        }
+                    }
+                    Util.showMessage(getApplicationContext(), "Sync data success", Toast.LENGTH_SHORT);
+                }else {
+                    Util.showMessage(getApplicationContext(), "Sync data failed", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+
     }
 
 }

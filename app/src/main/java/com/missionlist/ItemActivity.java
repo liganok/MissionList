@@ -94,13 +94,13 @@ public class ItemActivity extends Activity {
         scrollView = (ScrollView)findViewById(R.id.scrollView_item);
 
         //Set disable as default status
-        title.setEnabled(false);
+        /*title.setEnabled(false);
         start_date.setEnabled(false);
         due_date.setEnabled(false);
         description.setEnabled(false);
         spinnerCategory.setEnabled(false);
         spinnerPriority.setEnabled(false);
-        occurrence.setEnabled(false);
+        occurrence.setEnabled(false);*/
 
         mMission = Util.getMissionObject(getIntent());
         if (mMission == null){return;}
@@ -123,7 +123,7 @@ public class ItemActivity extends Activity {
         switch (mCategory){
             case 1:
                 spinnerCategory.setEnabled(false);
-                tableLayoutMore.setVisibility(View.GONE);
+                //tableLayoutMore.setVisibility(View.GONE);
                 break;
             case 2:
                 tableLayoutBrief.setVisibility(View.GONE);
@@ -134,7 +134,7 @@ public class ItemActivity extends Activity {
 
         }
 
-        tableLayoutNew.setVisibility(View.GONE);
+        //tableLayoutNew.setVisibility(View.GONE);
 
         mListAdapter = new MListAdapter(this,mList);
         list.setAdapter(mListAdapter);
@@ -145,7 +145,7 @@ public class ItemActivity extends Activity {
                     tableLayoutMore.setVisibility(View.GONE);
                     tableLayoutNew.setVisibility(View.VISIBLE);
                 }else {
-                    tableLayoutMore.setVisibility(View.VISIBLE);
+                    //tableLayoutMore.setVisibility(View.VISIBLE);
                     tableLayoutNew.setVisibility(View.GONE);
                 }
             }
@@ -182,8 +182,8 @@ public class ItemActivity extends Activity {
         mMission.setTitle(title.getText().toString());
         mMission.setDescription(description.getText().toString());
         mMission.setDraft(true);
-        mMission.setStartDate(new Date(System.currentTimeMillis()));
-        mMission.setDueDate(new Date(System.currentTimeMillis()));
+        //mMission.setStartDate(new Date(System.currentTimeMillis()));
+        //mMission.setDueDate(new Date(System.currentTimeMillis()));
         mMission.setStatus(getResources().getIntArray(R.array.status)[1]);
         mMission.setAuthor(ParseUser.getCurrentUser());
         mMission.setDelete(false);

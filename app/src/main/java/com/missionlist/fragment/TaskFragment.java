@@ -181,7 +181,7 @@ public class TaskFragment extends Fragment {
         query.whereEqualTo(Mission.AUTHOR, ParseUser.getCurrentUser());
         query.whereEqualTo(Mission.IS_DELETE,false);
         query.whereEqualTo(Mission.CATEGORY,0);//Only get task list
-        query.orderByAscending(Mission.TITLE);
+        //query.orderByAscending(Mission.TITLE);
         if (listType == DONE){
             query.whereEqualTo(Mission.STATUS, getResources().getIntArray(R.array.status)[2]);
         }else {

@@ -11,14 +11,14 @@
         android:title= "New"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always">
-        <menu>
+        <!--<menu>
             <group>
                 <item android:id="@+id/action_new_task"
                     android:title="New Task"/>
                 <item android:id="@+id/action_new_task_group"
                     android:title="New Group"/>
             </group>
-        </menu>
+        </menu>-->
     </item>
 
 
