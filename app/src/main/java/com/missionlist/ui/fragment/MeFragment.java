@@ -1,4 +1,4 @@
-package com.missionlist.fragment;
+package com.missionlist.ui.fragment;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.missionlist.MListApp;
+import com.missionlist.ui.activity.MListApp;
 import com.missionlist.R;
-import com.missionlist.SignInActivity;
+import com.missionlist.ui.activity.SignInActivity;
 import com.parse.ParseUser;
 
 public class MeFragment extends Fragment {

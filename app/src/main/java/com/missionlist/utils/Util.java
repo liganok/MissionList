@@ -1,4 +1,4 @@
-package com.missionlist.util;
+package com.missionlist.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,8 +13,6 @@ import com.missionlist.R;
 import com.missionlist.model.Mission;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Administrator on 2014/9/23.

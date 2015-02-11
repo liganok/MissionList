@@ -1,4 +1,4 @@
-package com.missionlist;
+package com.missionlist.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,7 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.missionlist.util.Util;
+import com.missionlist.R;
+import com.missionlist.utils.Util;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;

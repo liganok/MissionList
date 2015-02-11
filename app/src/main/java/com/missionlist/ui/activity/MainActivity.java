@@ -1,4 +1,4 @@
-package com.missionlist;
+package com.missionlist.ui.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -8,10 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -21,13 +18,14 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.missionlist.R;
 import com.missionlist.adapter.TabAdapter;
 import com.missionlist.astuetz.PagerSlidingTabStrip;
-import com.missionlist.fragment.TaskGroupFragment;
-import com.missionlist.fragment.MeFragment;
-import com.missionlist.fragment.TaskFragment;
+import com.missionlist.ui.fragment.TaskGroupFragment;
+import com.missionlist.ui.fragment.MeFragment;
+import com.missionlist.ui.fragment.TaskFragment;
 import com.missionlist.model.Mission;
-import com.missionlist.util.Util;
+import com.missionlist.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

@@ -5,7 +5,7 @@
     android:layout_marginLeft="@dimen/text_group_margin"
     android:layout_marginRight="@dimen/text_group_margin"
     android:layout_marginTop="@dimen/text_group_margin"
-    tools:context="com.missionlist.ItemActivity">
+    tools:context="com.missionlist.ui.activity.ItemActivity">
 
     <ScrollView
         android:layout_width="wrap_content"

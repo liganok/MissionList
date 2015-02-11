@@ -1,4 +1,4 @@
-package com.missionlist;
+package com.missionlist.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,9 +15,10 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.missionlist.R;
 import com.missionlist.adapter.MListAdapter;
 import com.missionlist.model.Mission;
-import com.missionlist.util.Util;
+import com.missionlist.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -131,10 +132,8 @@ public class ItemActivity extends Activity {
                 scrollView.setVisibility(View.GONE);
                 break;
             default:
-
+                tableLayoutNew.setVisibility(View.GONE);
         }
-
-        //tableLayoutNew.setVisibility(View.GONE);
 
         mListAdapter = new MListAdapter(this,mList);
         list.setAdapter(mListAdapter);
@@ -182,8 +181,8 @@ public class ItemActivity extends Activity {
         mMission.setTitle(title.getText().toString());
         mMission.setDescription(description.getText().toString());
         mMission.setDraft(true);
-        //mMission.setStartDate(new Date(System.currentTimeMillis()));
-        //mMission.setDueDate(new Date(System.currentTimeMillis()));
+        mMission.setStartDate(new Date(System.currentTimeMillis()));
+        mMission.setDueDate(new Date(System.currentTimeMillis()));
         mMission.setStatus(getResources().getIntArray(R.array.status)[1]);
         mMission.setAuthor(ParseUser.getCurrentUser());
         mMission.setDelete(false);

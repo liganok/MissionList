@@ -1,4 +1,4 @@
-package com.missionlist;
+package com.missionlist.ui.activity;
 
 import android.app.Application;
 

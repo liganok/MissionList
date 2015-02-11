@@ -1,4 +1,4 @@
-package com.missionlist;
+package com.missionlist.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,12 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.missionlist.R;
 import com.missionlist.model.Mission;
-import com.missionlist.util.Util;
+import com.missionlist.utils.Util;
 import com.parse.DeleteCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 

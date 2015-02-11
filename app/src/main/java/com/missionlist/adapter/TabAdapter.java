@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.missionlist.fragment.MeFragment;
-import com.missionlist.fragment.TaskFragment;
-import com.missionlist.fragment.TaskGroupFragment;
+import com.missionlist.ui.fragment.MeFragment;
+import com.missionlist.ui.fragment.TaskFragment;
+import com.missionlist.ui.fragment.TaskGroupFragment;
 
 /**
  * Created by Administrator on 2014/10/23.
